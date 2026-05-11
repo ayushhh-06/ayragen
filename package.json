@@ -1,0 +1,35 @@
+{
+  "name": "auragen-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "npm@10.9.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/passport-google-oauth20": "^2.0.17",
+    "@types/passport-jwt": "^4.0.1",
+    "turbo": "^2.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@nestjs/jwt": "^11.0.2",
+    "@nestjs/passport": "^11.0.5",
+    "@nestjs/swagger": "^11.4.2",
+    "bcrypt": "^6.0.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-jwt": "^4.0.1",
+    "swagger-ui-express": "^5.0.1",
+    "zustand": "^5.0.13"
+  }
+}

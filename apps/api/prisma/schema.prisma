@@ -1,0 +1,195 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id              String           @id @default(cuid())
+  email           String           @unique
+  password        String?          // Nullable for OAuth-only users
+  name            String?
+  role            String           @default("USER") // Enum: USER, ADMIN, CREATOR
+  avatarUrl       String?
+  projects        Project[]
+  subscriptions   Subscription[]
+  credits         CreditBalance?
+  refreshTokens   RefreshToken[]
+  assetLibrary    AssetLibraryItem[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// SQLite does not support native enums. 
+// Re-enable these when migrating back to PostgreSQL.
+// enum Role {
+//   USER
+//   ADMIN
+//   CREATOR
+// }
+
+model Project {
+  id                String             @id @default(cuid())
+  name              String
+  description       String?
+  userId            String
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  generatedWebsites GeneratedWebsite[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([userId])
+}
+
+model Template {
+  id                String             @id @default(cuid())
+  name              String
+  description       String?
+  baseConfig        String             // Json for PostgreSQL
+  websites          GeneratedWebsite[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model Theme {
+  id                String             @id @default(cuid())
+  name              String
+  config            String             // Json for PostgreSQL
+  websites          GeneratedWebsite[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model GeneratedWebsite {
+  id            String          @id @default(cuid())
+  title         String
+  description   String?
+  manifest      String          // Json for PostgreSQL
+  projectId     String
+  project       Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  templateId    String?
+  template      Template?       @relation(fields: [templateId], references: [id])
+  themeId       String?
+  theme         Theme?          @relation(fields: [themeId], references: [id])
+  assets        UploadedAsset[]
+  editHistory   EditHistory[]
+  isPublished   Boolean         @default(false)
+  subdomain     String?         @unique
+  customDomain  String?         @unique
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([projectId])
+  @@index([templateId])
+  @@index([themeId])
+}
+
+model EditHistory {
+  id            String           @id @default(cuid())
+  websiteId     String
+  website       GeneratedWebsite @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  changeSummary String
+  previousState String           // Json for PostgreSQL
+  newState      String           // Json for PostgreSQL
+  createdAt     DateTime         @default(now())
+
+  @@index([websiteId])
+}
+
+model UploadedAsset {
+  id               String           @id @default(cuid())
+  url              String
+  key              String           
+  type             String           // Enum: IMAGE, VIDEO, AUDIO, OTHER
+  name             String
+  size             Int
+  websiteId        String?
+  website          GeneratedWebsite? @relation(fields: [websiteId], references: [id])
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@index([websiteId])
+}
+
+model AssetLibraryItem {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assetUrl  String
+  assetKey  String
+  assetType String   // Enum: IMAGE, VIDEO, AUDIO, OTHER
+  name      String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model AIJob {
+  id          String    @id @default(cuid())
+  type        String    // generation, render, analyze
+  status      String    @default("PENDING") // Enum: PENDING, PROCESSING, COMPLETED, FAILED
+  progress    Int       @default(0)
+  payload     String    // Json for PostgreSQL
+  result      String?   // Json for PostgreSQL
+  error       String?
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Subscription {
+  id        String             @id @default(cuid())
+  userId    String
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId    String
+  status    String             @default("INACTIVE") // Enum: ACTIVE, INACTIVE, CANCELED, PAST_DUE
+  expiresAt DateTime?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  @@index([userId])
+}
+
+model CreditBalance {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount    Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+// enum AssetType {
+//   IMAGE
+//   VIDEO
+//   AUDIO
+//   OTHER
+// }
+//
+// enum JobStatus {
+//   PENDING
+//   PROCESSING
+//   COMPLETED
+//   FAILED
+// }
+//
+// enum SubscriptionStatus {
+//   ACTIVE
+//   INACTIVE
+//   CANCELED
+//   PAST_DUE
+// }
