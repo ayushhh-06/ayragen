@@ -2,25 +2,44 @@
 
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuthStore } from '@/database/state/useAuthStore';
 import { Loader2 } from 'lucide-react';
 
 export default function AuthCallbackPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { setToken } = useAuth() as any;
+  const { setAuth } = useAuthStore();
 
   useEffect(() => {
     const token = searchParams.get('token');
     if (token) {
-      // Save token and redirect
-      localStorage.setItem('auth_token', token);
-      if (setToken) setToken(token);
-      router.push('/dashboard');
+      const initAuth = async () => {
+        try {
+          // 1. Save token
+          localStorage.setItem('access_token', token);
+          document.cookie = `access_token=${token}; path=/; max-age=${60 * 60 * 24}; SameSite=Lax`;
+
+          // 2. Fetch User Profile
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3007/api';
+          const res = await fetch(`${apiUrl}/auth/profile`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const user = await res.json();
+
+          // 3. Set Global Auth State
+          setAuth(user, token);
+          router.push('/dashboard');
+        } catch (err) {
+          console.error('Auth sync failed:', err);
+          router.push('/auth');
+        }
+      };
+
+      initAuth();
     } else {
       router.push('/auth');
     }
-  }, [searchParams, router, setToken]);
+  }, [searchParams, router, setAuth]);
 
   return (
     <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center text-white font-sans">
