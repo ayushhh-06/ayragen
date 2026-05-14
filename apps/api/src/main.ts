@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
 import { NestFactory } from '@nestjs/core';
-// Triggering production deployment for Google Auth fix
+// Triggering production deployment for Auth Sync Fix
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
