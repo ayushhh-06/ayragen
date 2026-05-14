@@ -37,4 +37,16 @@ export class AuthController {
   getProfile(@Request() req) {
     return req.user;
   }
+
+  @Post('forgot-password')
+  @ApiOperation({ summary: 'Request password reset email' })
+  async forgotPassword(@Body('email') email: string) {
+    return this.authService.forgotPassword(email);
+  }
+
+  @Post('reset-password')
+  @ApiOperation({ summary: 'Reset password with token' })
+  async resetPassword(@Body() dto: any) {
+    return this.authService.resetPassword(dto.token, dto.password);
+  }
 }

@@ -33,6 +33,16 @@ model RefreshToken {
 
   @@index([userId])
 }
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
 
 // SQLite does not support native enums. 
 // Re-enable these when migrating back to PostgreSQL.
