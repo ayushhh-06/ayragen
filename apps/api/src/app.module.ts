@@ -1,21 +1,24 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
-import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { AllExceptionsFilter } from './logic/common/filters/all-exceptions.filter';
 import configuration from './config/configuration';
 import { validate } from './config/env.validation';
-import { WebsitesModule } from './modules/websites/websites.module';
-import { GenerationModule } from './modules/generation/generation.module';
-import { AssetsModule } from './modules/assets/assets.module';
-import { CommonModule } from './modules/common/common.module';
-import { PrismaModule } from './modules/prisma/prisma.module';
+
+// --- CATEGORIZED BACKEND CORE ---
+import { AiEngineModule } from './logic/ai/ai-engine.module';
+import { PublishingModule } from './logic/publishing/publishing.module';
+import { CommerceModule } from './payments/commerce.module';
+import { PrismaModule } from './database/prisma.module';
+import { AuthModule } from './security/auth.module';
+import { UserModule } from './security/user.module';
+import { CommonModule } from './logic/common/common.module';
+
 import { BullModule } from '@nestjs/bullmq';
 import { BullBoardModule } from '@bull-board/nestjs';
 import { ExpressAdapter } from '@bull-board/express';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { AuthModule } from './modules/auth/auth.module';
-import { UserModule } from './modules/user/user.module';
-import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { LoggingInterceptor } from './logic/common/interceptors/logging.interceptor';
 
 @Module({
   imports: [
@@ -42,13 +45,15 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
       route: '/admin/queues',
       adapter: ExpressAdapter,
     }),
-    CommonModule,
-    WebsitesModule,
-    GenerationModule,
-    AssetsModule,
-    PrismaModule,
-    AuthModule,
-    UserModule,
+    
+    // --- BACKEND CATEGORIES ---
+    PrismaModule,     // [DATABASE]
+    AuthModule,       // [SECURITY]
+    UserModule,       // [SECURITY]
+    AiEngineModule,   // [AI LOGIC]
+    PublishingModule, // [PUBLISHING LOGIC]
+    CommerceModule,   // [PAYMENTS]
+    CommonModule,     // [CORE LOGIC]
   ],
   providers: [
     {

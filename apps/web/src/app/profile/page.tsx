@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FloatingNavbar } from '@/components/shared/FloatingNavbar';
-import { AmbientBackground } from '@/components/shared/AmbientBackground';
-import { GlassCard } from '@/components/shared/GlassCard';
-import { GlowButton } from '@/components/shared/GlowButton';
+import { FloatingNavbar } from '@/frontend/interface/shared/FloatingNavbar';
+import { AmbientBackground } from '@/frontend/interface/shared/AmbientBackground';
+import { GlassCard } from '@/frontend/interface/shared/GlassCard';
+import { GlowButton } from '@/frontend/interface/shared/GlowButton';
 import { Sparkles, User, Settings, CreditCard, Bell, LogOut, Shield } from 'lucide-react';
 
 export default function ProfilePage() {

@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { useGenerationStore } from '@/store/useGenerationStore';
+import { useGenerationStore } from '@/database/state/useGenerationStore';
 
-const SOCKET_URL = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:3001';
+const SOCKET_URL = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:3007';
 
 export type GenerationStatus = 'idle' | 'processing' | 'complete' | 'error';
 

@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&family=Outfit:wght@200;400;600;800&display=swap');
 
@@ -9,27 +9,24 @@
 ══════════════════════════════════ */
 :root {
   --primary:       #c084fc;
-  --primary-dim:   rgba(192, 132, 252, 0.15);
+  --primary-dim:   rgba(192, 132, 252, 0.1);
   --primary-rgb:   192, 132, 252;
 
-  --rose:          #f9a8d4;
-  --rose-rgb:      249, 168, 212;
+  --background:    #050505;
+  --surface:       rgba(255,255,255,0.02);
+  --border:        rgba(255,255,255,0.05);
+  --text:          #fafafa;
+  --muted:         rgba(250,250,250,0.3);
 
-  --indigo:        #818cf8;
-  --indigo-rgb:    129, 140, 248;
+  /* Legendary Motion & Rhythm */
+  --ease-aura:     cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-film:     cubic-bezier(0.65, 0, 0.35, 1);
 
-  --background:    #040408;
-  --surface:       rgba(255,255,255,0.03);
-  --border:        rgba(255,255,255,0.07);
-  --text:          #f0f0f8;
-  --muted:         rgba(240,240,248,0.38);
-
-  --ease-silk:     cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
-
-  --font-display:  'Playfair Display', Georgia, serif;
-  --font-body:     'Inter', system-ui, sans-serif;
-  --font-label:    'Outfit', system-ui, sans-serif;
+  /* Editorial Typography */
+  --font-display:  'Playfair Display', serif;
+  --font-body:     'Inter', sans-serif;
+  --letter-spacing-cinematic: -0.04em;
+  --line-height-directed: 1.15;
 }
 
 /* ═══════════════════════════════
@@ -53,8 +50,9 @@ body {
 ══════════════════════════════════ */
 h1, h2, h3, .font-display {
   font-family: var(--font-display);
-  letter-spacing: -0.025em;
-  line-height: 0.92;
+  letter-spacing: var(--letter-spacing-cinematic);
+  line-height: var(--line-height-directed);
+  -webkit-font-smoothing: antialiased;
 }
 
 .label {
@@ -67,52 +65,46 @@ h1, h2, h3, .font-display {
 }
 
 /* ═══════════════════════════════
-   GLASS SURFACES
+   MASTERPIECE SURFACES
+   Treating the UI like cinematography
 ══════════════════════════════════ */
 .glass {
-  background: var(--surface);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.015);
+  backdrop-filter: blur(32px) saturate(110%);
+  -webkit-backdrop-filter: blur(32px) saturate(110%);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .glass-strong {
-  background: rgba(255,255,255,0.055);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(48px) saturate(120%);
+  -webkit-backdrop-filter: blur(48px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* ═══════════════════════════════
-   GLOW UTILITIES
-══════════════════════════════════ */
+/* Atmospheric Glows: Lit, not colored */
 .glow-text {
-  text-shadow:
-    0 0 40px rgba(var(--primary-rgb), 0.5),
-    0 0 80px rgba(var(--primary-rgb), 0.2);
-}
-
-.glow-rose {
-  text-shadow:
-    0 0 40px rgba(var(--rose-rgb), 0.5),
-    0 0 80px rgba(var(--rose-rgb), 0.2);
+  text-shadow: 0 0 30px rgba(var(--primary-rgb), 0.25);
 }
 
 .glow-box {
-  box-shadow:
-    0 0 0 1px rgba(var(--primary-rgb), 0.25),
-    0 0 30px rgba(var(--primary-rgb), 0.1),
-    0 20px 60px rgba(0,0,0,0.4);
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 30px 60px -12px rgba(0, 0, 0, 0.5),
+    0 18px 36px -18px rgba(0, 0, 0, 0.5);
 }
 
 .glow-box-hover {
-  transition: box-shadow 0.4s var(--ease-silk);
+  transition: all 0.7s var(--ease-aura);
 }
+
 .glow-box-hover:hover {
-  box-shadow:
-    0 0 0 1px rgba(var(--primary-rgb), 0.5),
-    0 0 40px rgba(var(--primary-rgb), 0.2),
-    0 30px 80px rgba(0,0,0,0.5);
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 40px 80px -12px rgba(0, 0, 0, 0.6);
+  transform: translateY(-2px);
 }
 
 /* ═══════════════════════════════

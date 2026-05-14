@@ -1,0 +1,45 @@
+# Stage 1: Build
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Copy root monorepo files
+COPY package.json package-lock.json ./
+COPY apps/api/package.json ./apps/api/
+COPY packages/schema/package.json ./packages/schema/
+
+# Install dependencies
+RUN npm install
+
+# Copy source code
+COPY apps/api ./apps/api
+COPY packages/schema ./packages/schema
+
+# Build the API and Schema
+RUN npm run build -w apps/api
+
+# Stage 2: Runtime
+FROM node:20-alpine
+
+# Install system dependencies for Puppeteer and FFmpeg
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
+    ffmpeg
+
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
+WORKDIR /app
+
+# Copy production dependencies and dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/apps/api/dist ./dist
+COPY --from=builder /app/apps/api/package.json ./package.json
+
+EXPOSE 3007
+
+CMD ["node", "dist/main.js"]

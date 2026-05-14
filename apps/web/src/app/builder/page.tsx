@@ -1,255 +1,282 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles, Wand2, ArrowLeft, Loader2, Camera, Palette, Music, Globe, Database, BrainCircuit } from 'lucide-react';
 import Link from 'next/link';
-import { Sparkles, ArrowLeft, Wand2, Globe } from 'lucide-react';
-
 import { useGeneration } from '@/hooks/useGeneration';
-import { AmbientBackground } from '@/components/shared/AmbientBackground';
-import { FloatingParticles } from '@/components/shared/FloatingParticles';
-import { GlowButton } from '@/components/shared/GlowButton';
-import { RomanticLoader } from '@/components/shared/RomanticLoader';
-import { Renderer } from '@/components/engine/Renderer';
-import { MediaUploadZone } from '@/components/shared/MediaUploadZone';
+import { useRouter } from 'next/navigation';
 
-const PROMPT_SUGGESTIONS = [
-  "A dreamy anniversary website",
-  "A cinematic apology page",
-  "A romantic memory website",
-  "An emotional birthday surprise"
+const MOODS = [
+  { id: 'cinematic', label: 'Cinematic', icon: <Camera className="w-3 h-3" /> },
+  { id: 'romantic', label: 'Romantic', icon: <Sparkles className="w-3 h-3" /> },
+  { id: 'dark-premium', label: 'Dark Premium', icon: <Palette className="w-3 h-3" /> },
+  { id: 'ethereal', label: 'Ethereal', icon: <Music className="w-3 h-3" /> },
 ];
 
-const MOODS = ['Romantic', 'Melancholic', 'Cinematic', 'Dreamy', 'Euphoric'];
-const AESTHETICS = ['Soft Minimal', 'Dark Love', 'Korean Aesthetic', 'Retro Film', 'Luxury Black'];
-
 export default function BuilderPage() {
+  const router = useRouter();
   const [prompt, setPrompt] = useState('');
-  const [files, setFiles] = useState<File[]>([]);
-  const [selectedMood, setSelectedMood] = useState<string | null>(null);
-  const [selectedAesthetic, setSelectedAesthetic] = useState<string | null>(null);
-  const [isFocused, setIsFocused] = useState(false);
+  const [selectedMood, setSelectedMood] = useState('cinematic');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  
   const { generate, status, currentStep, manifest, error } = useGeneration();
 
   const handleGenerate = () => {
     if (prompt.trim() && status !== 'processing') {
-      const fullPrompt = `${prompt}. Mood: ${selectedMood || 'Cinematic'}. Aesthetic: ${selectedAesthetic || 'Soft Minimal'}.`;
+      const fullPrompt = `${prompt}. Mood: ${selectedMood}.`;
       generate(fullPrompt);
     }
   };
 
+  // Auto-resize textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
+    }
+  }, [prompt]);
+
+  // Navigate when done
+  useEffect(() => {
+    if (status === 'complete' && manifest?.id) {
+      const timer = setTimeout(() => {
+        router.push(`/editor/${manifest.id}`);
+      }, 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [status, manifest, router]);
+
   return (
-    <main className="relative min-h-screen bg-background overflow-hidden flex selection:bg-primary/30 selection:text-white">
-      <AmbientBackground />
-      <FloatingParticles count={30} />
-      <div className="noise" />
-
-      {/* Left Panel - Prompt & Emotion Input */}
-      <section className="relative z-20 w-full lg:w-[45%] h-screen flex flex-col border-r border-white/5 bg-black/40 backdrop-blur-2xl p-8 lg:p-12 overflow-y-auto overflow-x-hidden custom-scrollbar">
-        {/* Header */}
-        <header className="flex items-center justify-between mb-16 flex-shrink-0">
-          <Link href="/" className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors group">
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-label text-xs uppercase tracking-[0.2em]">Return</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="font-label text-xs uppercase tracking-[0.2em] text-primary">AuraGen v3.0</span>
-          </div>
-        </header>
-
-        {/* Builder Content */}
-        <div className="flex-1 flex flex-col max-w-xl mx-auto w-full pb-20">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
-            <h1 className="font-display text-4xl lg:text-5xl font-black mb-4">What feeling are we capturing?</h1>
-            <p className="text-white/40 text-lg mb-10 font-light">
-              Describe the emotion, the memory, or the story. Our intelligence engine will weave the cinematic universe.
-            </p>
-
-            {/* Glowing Textarea */}
-            <div className={`relative transition-all duration-700 mb-10 ${isFocused ? 'scale-[1.02]' : 'scale-100'}`}>
-              <div className={`absolute -inset-1 bg-gradient-to-r from-primary via-indigo to-rose rounded-3xl blur-xl opacity-0 transition-opacity duration-700 ${isFocused ? 'opacity-30' : 'opacity-0'}`} />
-              
-              <div className="relative glass-strong rounded-[2rem] overflow-hidden flex flex-col group">
-                <textarea
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={() => setIsFocused(false)}
-                  placeholder="Tell me a story..."
-                  className="w-full bg-transparent text-xl font-medium text-white placeholder:text-white/20 p-8 min-h-[200px] resize-none outline-none"
-                />
-              </div>
-            </div>
-
-            {/* Parameter Selectors */}
-            <div className="space-y-8 mb-10">
-              {/* Mood Selection */}
-              <div>
-                <span className="label mb-3 block text-white/50">Emotional Tone</span>
-                <div className="flex flex-wrap gap-2">
-                  {MOODS.map(mood => (
-                    <button
-                      key={mood}
-                      onClick={() => setSelectedMood(mood === selectedMood ? null : mood)}
-                      className={`px-4 py-2 rounded-full border text-xs font-medium transition-all ${selectedMood === mood ? 'border-primary bg-primary/20 text-white shadow-[0_0_15px_rgba(192,132,252,0.3)]' : 'border-white/10 bg-white/5 text-white/50 hover:bg-white/10 hover:text-white'}`}
-                    >
-                      {mood}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Aesthetic Selection */}
-              <div>
-                <span className="label mb-3 block text-white/50">Cinematic Aesthetic</span>
-                <div className="flex flex-wrap gap-2">
-                  {AESTHETICS.map(aes => (
-                    <button
-                      key={aes}
-                      onClick={() => setSelectedAesthetic(aes === selectedAesthetic ? null : aes)}
-                      className={`px-4 py-2 rounded-full border text-xs font-medium transition-all ${selectedAesthetic === aes ? 'border-rose bg-rose/20 text-white shadow-[0_0_15px_rgba(249,168,212,0.3)]' : 'border-white/10 bg-white/5 text-white/50 hover:bg-white/10 hover:text-white'}`}
-                    >
-                      {aes}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Media Upload */}
-            <div className="mb-10">
-              <MediaUploadZone onFilesChange={setFiles} />
-            </div>
-
-            {/* Generate Action */}
-            <div className="flex flex-col gap-4">
-              <GlowButton 
-                variant="primary" 
-                size="lg" 
-                className="w-full rounded-2xl py-5 text-lg shadow-[0_0_40px_rgba(192,132,252,0.4)]" 
-                onClick={handleGenerate}
-                disabled={!prompt.trim() || status === 'processing'}
-              >
-                Generate Universe
-                <Wand2 className="w-5 h-5 ml-2" />
-              </GlowButton>
-
-              {/* Suggestions */}
-              <div className="flex flex-wrap gap-2 justify-center mt-4">
-                {PROMPT_SUGGESTIONS.map((sug, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setPrompt(sug)}
-                    className="text-xs text-white/30 hover:text-white/70 transition-colors"
-                  >
-                    "{sug}"
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {error && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-                {error}
-              </motion.div>
-            )}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Right Panel - Live Preview */}
-      <section className="relative z-10 hidden lg:flex flex-1 h-screen flex-col">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-rose/5" />
-        
-        <div className="flex-1 flex items-center justify-center p-12">
-          <AnimatePresence mode="wait">
-            
-            {status === 'idle' && (
-              <motion.div
-                key="idle"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
-                transition={{ duration: 0.8 }}
-                className="text-center"
-              >
-                <div className="w-32 h-32 mx-auto rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-8 relative">
-                  <div className="absolute inset-0 rounded-full border-t border-primary/30 animate-spin" style={{ animationDuration: '4s' }} />
-                  <Sparkles className="w-8 h-8 text-white/20" />
-                </div>
-                <h3 className="font-display text-2xl text-white/40 mb-2">Awaiting your narrative</h3>
-                <p className="text-white/20 text-sm max-w-sm mx-auto">The canvas is blank. The atmosphere is quiet. Let's create something beautiful.</p>
-              </motion.div>
-            )}
-
-            {status === 'processing' && (
-              <motion.div
-                key="processing"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0, filter: 'blur(20px)' }}
-                className="w-full h-full flex flex-col items-center justify-center"
-              >
-                <RomanticLoader step={currentStep} />
-              </motion.div>
-            )}
-
-            {status === 'complete' && manifest && (
-              <motion.div
-                key="complete"
-                initial={{ opacity: 0, y: 40, filter: 'blur(20px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-                className="w-full h-full glass-card rounded-[2.5rem] overflow-hidden shadow-[0_0_100px_rgba(192,132,252,0.15)] relative group"
-              >
-                {/* Live Output Container */}
-                <div className="absolute inset-0 overflow-y-auto overflow-x-hidden bg-black custom-scrollbar">
-                  <Renderer manifest={manifest} />
-                </div>
-                
-                {/* Floating Preview Toolbar */}
-                <div className="absolute top-6 right-6 z-50 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Link href={`/editor/${manifest.id || 'demo'}`}>
-                    <GlowButton variant="glass" size="sm">
-                      Open in Visual Editor
-                    </GlowButton>
-                  </Link>
-                  <GlowButton variant="primary" size="sm">
-                    <Globe className="w-4 h-4 mr-2" /> Publish Live
-                  </GlowButton>
-                </div>
-              </motion.div>
-            )}
-
-          </AnimatePresence>
-        </div>
-      </section>
+    <main className="relative min-h-screen bg-[#030105] flex flex-col font-sans text-white overflow-hidden selection:bg-pink-500/30">
       
-      {/* Mobile Live Preview Fullscreen Overlay */}
-      <AnimatePresence>
-        {(status === 'processing' || status === 'complete') && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="lg:hidden fixed inset-0 z-50 bg-background overflow-hidden"
-          >
-            {status === 'processing' ? (
-              <RomanticLoader step={currentStep} />
-            ) : (
-              <div className="w-full h-full relative">
-                <div className="absolute top-4 left-4 z-50">
-                  <GlowButton variant="glass" size="sm" onClick={() => generate('')}>
-                    <ArrowLeft className="w-4 h-4 mr-2" /> Back
-                  </GlowButton>
+      {/* Immersive Ambient Background */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <motion.div 
+          animate={{ 
+            scale: status === 'processing' ? [1, 1.2, 1] : 1,
+            opacity: status === 'processing' ? [0.3, 0.6, 0.3] : 0.3 
+          }}
+          transition={{ duration: 4, repeat: Infinity }}
+          className="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] rounded-full bg-pink-600/20 blur-[150px] mix-blend-screen" 
+        />
+        <motion.div 
+          animate={{ 
+            scale: status === 'processing' ? [1, 1.5, 1] : 1,
+            opacity: status === 'processing' ? [0.2, 0.5, 0.2] : 0.2 
+          }}
+          transition={{ duration: 5, repeat: Infinity, delay: 1 }}
+          className="absolute bottom-1/4 right-1/4 w-[40vw] h-[40vw] rounded-full bg-purple-600/20 blur-[150px] mix-blend-screen" 
+        />
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04] mix-blend-overlay" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#030105] opacity-90" />
+      </div>
+
+      {/* Header */}
+      <header className="relative z-50 w-full p-8 flex justify-between items-center">
+        <Link href="/dashboard" className="flex items-center gap-2 text-white/40 hover:text-white transition-colors group">
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          <span className="text-xs font-bold uppercase tracking-widest">Studio</span>
+        </Link>
+        <div className="flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-pink-400" />
+          <span className="font-display font-bold tracking-tight text-lg">AuraGen <span className="text-white/20 italic font-light">AI</span></span>
+        </div>
+      </header>
+
+      {/* Central Content Area */}
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-6 w-full max-w-5xl mx-auto">
+        <AnimatePresence mode="wait">
+          
+          {/* INPUT STATE */}
+          {status !== 'processing' && status !== 'complete' && (
+            <motion.div 
+              key="input-state"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.05, filter: 'blur(20px)' }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full flex flex-col items-center max-w-2xl"
+            >
+              <h1 className="text-5xl md:text-6xl font-bold font-display text-white mb-4 text-center leading-[1.1] tracking-tight">
+                Design with <br/>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500">Pure Imagination.</span>
+              </h1>
+              <p className="text-white/40 mb-12 text-center max-w-md font-light leading-relaxed">
+                Describe your story, brand, or emotion. Our AI will architect a unique cinematic universe in seconds.
+              </p>
+
+              {/* Magical Input Box */}
+              <div className="w-full relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded-[32px] blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="relative bg-[#0A0512]/80 backdrop-blur-3xl border border-white/10 rounded-[32px] p-2 shadow-2xl flex flex-col transition-all duration-500 focus-within:border-pink-500/40 focus-within:bg-[#0F071A]">
+                  
+                  <textarea
+                    ref={textareaRef}
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    placeholder="Describe your vision... (e.g. A midnight garden theme for a poetry portfolio with starlit particles)"
+                    className="w-full bg-transparent border-none outline-none resize-none p-6 min-h-[120px] text-lg text-white placeholder:text-white/10 font-light leading-relaxed scrollbar-none"
+                    rows={1}
+                  />
+                  
+                  <div className="flex justify-between items-center px-4 pb-4 pt-2">
+                    {/* Mood Selector */}
+                    <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                      {MOODS.map((mood) => (
+                        <button
+                          key={mood.id}
+                          onClick={() => setSelectedMood(mood.id)}
+                          className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all whitespace-nowrap border ${
+                            selectedMood === mood.id 
+                              ? 'bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.3)]' 
+                              : 'bg-white/5 text-white/40 border-white/5 hover:bg-white/10 hover:text-white/70'
+                          }`}
+                        >
+                          {mood.icon}
+                          {mood.label}
+                        </button>
+                      ))}
+                    </div>
+
+                    <button 
+                      onClick={handleGenerate}
+                      disabled={!prompt.trim()}
+                      className="ml-4 shrink-0 flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 text-white hover:scale-110 transition-all disabled:opacity-30 disabled:grayscale disabled:hover:scale-100 shadow-[0_0_30px_rgba(236,72,153,0.4)]"
+                    >
+                      <Wand2 className="w-6 h-6" />
+                    </button>
+                  </div>
                 </div>
-                {manifest && <Renderer manifest={manifest} />}
               </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+              
+              {error && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8 px-5 py-3 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-[13px] text-center font-medium">
+                  {error}
+                </motion.div>
+              )}
+            </motion.div>
+          )}
+
+          {/* GENERATION STATE - REALTIME MAGIC */}
+          {(status === 'processing' || status === 'complete') && (
+            <motion.div 
+              key="generation-state"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="w-full grid lg:grid-cols-2 gap-12 items-center"
+            >
+              {/* Left Side: Status & Thinking */}
+              <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
+                <div className="relative w-32 h-32 mb-10">
+                   {/* Glowing Core */}
+                   <motion.div 
+                    animate={{ rotate: 360 }} 
+                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-0 rounded-full border border-pink-500/20 border-t-pink-500/60 shadow-[0_0_60px_rgba(236,72,153,0.2)]"
+                  />
+                  <motion.div 
+                    animate={{ rotate: -360 }} 
+                    transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-4 rounded-full border border-purple-500/10 border-b-purple-500/40"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <BrainCircuit className="w-10 h-10 text-white animate-pulse" />
+                  </div>
+                </div>
+
+                <div className="space-y-4 mb-10">
+                   <h2 className="text-3xl md:text-4xl font-bold font-display text-white">
+                    {status === 'complete' ? 'Generation Finalized.' : currentStep}
+                  </h2>
+                  <p className="text-white/30 text-sm font-light max-w-sm tracking-wide">
+                    {status === 'complete' 
+                      ? 'The cinematic manifest is ready. Transitioning to Creative Editor...' 
+                      : 'Our neural engines are weaving your prompt into a production-grade digital experience.'}
+                  </p>
+                </div>
+
+                {/* Progress Indicators */}
+                <div className="w-full max-w-xs space-y-6">
+                  <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                    <span>Engine Integrity</span>
+                    <span>{status === 'complete' ? '100%' : 'Active'}</span>
+                  </div>
+                  <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                    <motion.div 
+                      className="h-full bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500"
+                      initial={{ width: "0%" }}
+                      animate={{ width: status === 'complete' ? "100%" : "85%" }}
+                      transition={{ duration: status === 'complete' ? 0.8 : 30, ease: "easeOut" }}
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 gap-2">
+                    {[1,2,3,4].map(i => (
+                      <motion.div 
+                        key={i}
+                        animate={{ opacity: [0.2, 0.5, 0.2] }}
+                        transition={{ duration: 1.5, delay: i * 0.2, repeat: Infinity }}
+                        className="h-1 bg-white/10 rounded-full"
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Side: Realtime Code Stream (The "Magic" Visual) */}
+              <div className="relative group perspective-[1000px] hidden lg:block">
+                <div className="absolute -inset-4 bg-gradient-to-tr from-purple-500/10 to-transparent rounded-[40px] blur-3xl opacity-50" />
+                <div className="relative bg-[#050208]/60 backdrop-blur-3xl border border-white/5 rounded-[40px] p-8 h-[500px] overflow-hidden flex flex-col shadow-2xl">
+                   <div className="flex items-center gap-2 mb-6 border-b border-white/5 pb-4">
+                     <Database className="w-3.5 h-3.5 text-white/20" />
+                     <span className="text-[10px] font-mono text-white/30 uppercase tracking-widest">Neural Data Stream</span>
+                     <div className="ml-auto flex gap-1.5">
+                       <div className="w-2 h-2 rounded-full bg-red-500/20" />
+                       <div className="w-2 h-2 rounded-full bg-yellow-500/20" />
+                       <div className="w-2 h-2 rounded-full bg-green-500/20" />
+                     </div>
+                   </div>
+
+                   <div className="flex-1 font-mono text-[11px] leading-relaxed overflow-hidden">
+                      <AnimatePresence>
+                        <motion.div
+                          initial={{ y: 20, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          className="space-y-4"
+                        >
+                          {manifest ? (
+                             <pre className="text-purple-300/80">
+                               {JSON.stringify(manifest, null, 2)}
+                             </pre>
+                          ) : (
+                            <div className="space-y-3 opacity-40">
+                              <div className="h-3 w-[80%] bg-white/10 rounded animate-pulse" />
+                              <div className="h-3 w-[60%] bg-white/10 rounded animate-pulse" />
+                              <div className="h-3 w-[90%] bg-white/10 rounded animate-pulse" />
+                              <div className="h-3 w-[40%] bg-white/10 rounded animate-pulse" />
+                              <div className="h-3 w-[70%] bg-white/10 rounded animate-pulse" />
+                              <div className="h-3 w-[50%] bg-white/10 rounded animate-pulse" />
+                              <div className="h-3 w-[85%] bg-white/10 rounded animate-pulse" />
+                            </div>
+                          )}
+                        </motion.div>
+                      </AnimatePresence>
+                   </div>
+
+                   {/* Scanning Effect */}
+                   <motion.div 
+                    animate={{ top: ['0%', '100%', '0%'] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-x-0 h-20 bg-gradient-to-b from-transparent via-purple-500/10 to-transparent pointer-events-none"
+                   />
+                </div>
+              </div>
+
+            </motion.div>
+          )}
+
+        </AnimatePresence>
+      </div>
     </main>
   );
 }

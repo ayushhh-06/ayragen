@@ -2,24 +2,24 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/frontend/interface/shared/Button';
 import { motion } from 'framer-motion';
-import { CinematicBackground } from '@/components/shared/CinematicBackground';
+import { CinematicBackground } from '@/frontend/interface/shared/CinematicBackground';
 import Link from 'next/link';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, isLoading } = useAuth();
-  const [error, setError] = useState('');
+  const { login, loading, error: authError } = useAuth();
+  const [localError, setLocalError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await login({ email, password });
-    if (!result.success) {
-      setError(result.message);
-    }
+    setLocalError('');
+    await login({ email, password });
   };
+
+  const displayError = localError || authError;
 
   return (
     <div className="relative min-h-screen flex items-center justify-center p-4">
@@ -31,45 +31,55 @@ export default function LoginPage() {
         className="w-full max-w-md p-8 rounded-3xl bg-white/[0.03] border border-white/10 backdrop-blur-2xl shadow-2xl"
       >
         <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-xl bg-red-600 flex items-center justify-center mx-auto mb-4 font-bold text-xl">A</div>
-          <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-          <p className="text-white/40">Step back into the future of web design.</p>
+          <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center mx-auto mb-4 font-bold text-xl text-white shadow-[0_0_30px_rgba(192,132,252,0.3)]">A</div>
+          <h1 className="text-3xl font-black text-white mb-2 uppercase tracking-tighter">Welcome Back</h1>
+          <p className="text-white/40 font-medium italic text-xs uppercase tracking-widest">Step back into the future of AuraGen.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-xs font-medium text-white/40 uppercase tracking-widest mb-1.5 ml-1">Email Address</label>
+            <label className="block text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-2 ml-1">Identity (Email)</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-red-500/50 transition-all outline-none"
+              placeholder="your@soul.com"
+              className="w-full bg-white/[0.02] border border-white/5 rounded-2xl px-5 py-4 text-white focus:border-primary/50 transition-all outline-none placeholder:text-white/10"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-white/40 uppercase tracking-widest mb-1.5 ml-1">Password</label>
+            <label className="block text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-2 ml-1">Access Key (Password)</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-red-500/50 transition-all outline-none"
+              placeholder="••••••••"
+              className="w-full bg-white/[0.02] border border-white/5 rounded-2xl px-5 py-4 text-white focus:border-primary/50 transition-all outline-none placeholder:text-white/10"
               required
             />
           </div>
 
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          {displayError && (
+            <motion.p 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-red-400 text-[10px] font-black uppercase tracking-widest text-center"
+            >
+              {displayError}
+            </motion.p>
+          )}
 
-          <Button type="submit" variant="premium" className="w-full py-6" disabled={isLoading}>
-            {isLoading ? 'Authenticating...' : 'Sign In'}
+          <Button type="submit" variant="premium" className="w-full py-7" disabled={loading}>
+            {loading ? 'Authenticating...' : 'Sign In'}
           </Button>
         </form>
 
-        <div className="mt-8 pt-8 border-t border-white/5 text-center">
-          <p className="text-white/40 text-sm">
-            Don&apos;t have an account?{' '}
-            <Link href="/register" className="text-red-500 hover:text-red-400 font-medium">Create one free</Link>
+        <div className="mt-10 pt-8 border-t border-white/5 text-center">
+          <p className="text-white/20 text-[10px] font-black uppercase tracking-widest">
+            New to the Universe?{' '}
+            <Link href="/register" className="text-primary hover:text-white transition-all underline decoration-primary/20 underline-offset-4">Create your legacy</Link>
           </p>
         </div>
       </motion.div>

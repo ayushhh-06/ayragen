@@ -1,69 +1,66 @@
-'use client';
-
-import { useAuthStore } from '@/store/useAuthStore';
-import { api } from '@/lib/api';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { apiClient } from '@/lib/api-client';
+import { useAuthStore } from '@/database/state/useAuthStore';
 
-export const useAuth = () => {
-  const { user, token, isAuthenticated, setAuth, logout } = useAuthStore();
+export function useAuth() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const { setAuth, logout: clearStore, user, isAuthenticated } = useAuthStore();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const setCookie = (name: string, value: string) => {
+    document.cookie = `${name}=${value}; path=/; max-age=${60 * 60 * 24}; SameSite=Lax`;
+  };
+
+  const deleteCookie = (name: string) => {
+    document.cookie = `${name}=; path=/; max-age=0; SameSite=Lax`;
+  };
 
   const login = async (credentials: any) => {
-    setIsLoading(true);
+    setLoading(true);
+    setError(null);
     try {
-      const response = await api.post('/auth/login', credentials);
-      const { user, access_token } = response.data;
+      const response = await apiClient.post('/auth/login', credentials);
+      const { access_token, user } = response.data;
+      
+      localStorage.setItem('access_token', access_token);
+      setCookie('access_token', access_token);
       
       setAuth(user, access_token);
-      localStorage.setItem('auragen_token', access_token);
-      
       router.push('/dashboard');
-      return { success: true };
-    } catch (error: any) {
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Login failed' 
-      };
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  const register = async (data: any) => {
-    setIsLoading(true);
+  const signup = async (data: any) => {
+    setLoading(true);
+    setError(null);
     try {
-      const response = await api.post('/auth/register', data);
-      const { user, access_token } = response.data;
+      const response = await apiClient.post('/auth/register', data);
+      const { access_token, user } = response.data;
+      
+      localStorage.setItem('access_token', access_token);
+      setCookie('access_token', access_token);
       
       setAuth(user, access_token);
-      localStorage.setItem('auragen_token', access_token);
-      
       router.push('/dashboard');
-      return { success: true };
-    } catch (error: any) {
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Registration failed' 
-      };
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Signup failed.');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  const performLogout = () => {
-    logout();
-    router.push('/');
+  const logout = () => {
+    localStorage.removeItem('access_token');
+    deleteCookie('access_token');
+    clearStore();
+    router.push('/auth');
   };
 
-  return {
-    user,
-    token,
-    isAuthenticated,
-    isLoading,
-    login,
-    register,
-    logout: performLogout,
-  };
-};
+  return { user, isAuthenticated, login, signup, logout, loading, error };
+}

@@ -1,8 +1,8 @@
 'use client';
 
-import { useGenerationStore } from '@/store/useGenerationStore';
-import { DynamicRenderer } from '@/components/builder/DynamicRenderer';
-import { Button } from '@/components/ui/Button';
+import { useGenerationStore } from '@/database/state/useGenerationStore';
+import { Renderer } from '@/frontend/interface/canvas/Renderer';
+import { Button } from '@/frontend/interface/shared/Button';
 import { 
   Settings, 
   Layers, 
@@ -83,7 +83,7 @@ export default function ProjectEditor() {
         <div className="flex-1 overflow-auto p-8 bg-[radial-gradient(circle_at_center,#111111_0%,#080808_100%)]">
           <div className="max-w-[1440px] mx-auto min-h-full border border-white/10 rounded-2xl bg-white/[0.02] shadow-2xl overflow-hidden">
             {manifest ? (
-              <DynamicRenderer manifest={manifest} />
+              <Renderer manifest={manifest} />
             ) : (
               <div className="h-full flex items-center justify-center italic text-white/10">
                 No active project. Return to Dashboard to start generating.

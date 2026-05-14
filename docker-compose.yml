@@ -4,13 +4,13 @@ services:
   api:
     build:
       context: .
-      dockerfile: apps/api/Dockerfile
+      dockerfile: apps/api/Dockerfile.prod
     ports:
-      - "3001:3001"
+      - "3007:3007"
     environment:
-      - NODE_ENV=production
-      - DATABASE_URL=postgresql://user:password@db:5432/auragen?schema=public
+      - DATABASE_URL=postgresql://user:password@db:5432/auragen
       - REDIS_URL=redis://redis:6379
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     depends_on:
       - db
       - redis
@@ -27,7 +27,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   redis:
-    image: redis:alpine
+    image: redis:7-alpine
     ports:
       - "6379:6379"
 

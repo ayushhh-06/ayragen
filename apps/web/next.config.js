@@ -4,6 +4,7 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'grainy-gradients.vercel.app' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
     ],
   },
 };

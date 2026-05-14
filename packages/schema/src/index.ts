@@ -10,8 +10,12 @@ export const EmotionalToneSchema = z.object({
 export type EmotionalTone = z.infer<typeof EmotionalToneSchema>;
 
 export const ThemeSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().optional(),
   colors: z.object({
     primary: z.string(),
+    secondary: z.string().optional(),
+    muted: z.string().optional(),
     background: z.string(),
     text: z.string(),
     accent: z.string(),
@@ -22,15 +26,23 @@ export const ThemeSchema = z.object({
     heading: z.string(),
     body: z.string(),
     sizeScale: z.number().optional(),
+    sizeMultiplier: z.number().optional(),
   }),
   effects: z.object({
     glassmorphism: z.boolean().default(true),
     particles: z.string().optional(), // snow, stars, floating, none
     animations: z.string().default('smooth'), // fluid, snappy, dramatic
     grain: z.boolean().default(false),
+    glow: z.boolean().optional(),
   }),
-  spacing: z.string().optional(),
+  animations: z.object({
+    intensity: z.number().optional(),
+    transitionSpeed: z.string().optional(),
+    mood: z.string().optional(),
+  }).optional(),
+  spacing: z.any().optional(), // Can be string or object { base, sectionGap }
   borderRadius: z.string().optional(),
+  gradients: z.any().optional(),
 });
 
 export type Theme = z.infer<typeof ThemeSchema>;
@@ -77,6 +89,9 @@ export const TemplateSchema = z.object({
   name: z.string(),
   category: z.string(),
   previewUrl: z.string().optional(),
+  description: z.string().optional(),
+  themeOverride: z.record(z.any()).optional(),
+  sections: z.array(z.any()).optional(),
 });
 
 export type Template = z.infer<typeof TemplateSchema>;

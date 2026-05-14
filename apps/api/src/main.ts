@@ -4,17 +4,43 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
-import * as compression from 'compression';
+import compression from 'compression';
 import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
+import * as fs from 'fs';
 
 async function bootstrap() {
   const logger = new Logger('AuraGen_Core');
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.setGlobalPrefix('api');
 
+  // Ensure temp_exports directory exists
+  const exportsPath = join(process.cwd(), 'temp_exports');
+  if (!fs.existsSync(exportsPath)) fs.mkdirSync(exportsPath, { recursive: true });
+
+  app.useStaticAssets(exportsPath, {
+    prefix: '/temp_exports',
+  });
+
   // Security & Performance
-  app.use(helmet());
+  // Enterprise Security Hardening
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        imgSrc: ["'self'", "data:", "https://images.unsplash.com", "https://res.cloudinary.com"],
+        connectSrc: ["'self'", "wss://localhost:3007", "http://localhost:3007"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        objectSrc: ["'none'"],
+        mediaSrc: ["'self'", "https://www.soundhelix.com"],
+        frameSrc: ["'none'"],
+      },
+    },
+  }));
   app.use(compression());
 
   // Global Validation Pipe

@@ -1,4 +1,4 @@
-import { tokens } from '../themes/designTokens';
+import { tokens } from '@/frontend/experience/themes/designTokens';
 
 export const motionPresets = {
   cinematicFade: {
