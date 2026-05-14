@@ -19,6 +19,7 @@ model User {
   credits         CreditBalance?
   refreshTokens   RefreshToken[]
   assetLibrary    AssetLibraryItem[]
+  passwordResets  PasswordResetToken[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 }
