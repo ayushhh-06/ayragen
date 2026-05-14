@@ -103,7 +103,7 @@ export class SocialService {
             }
           ],
         },
-      },
+      } as any,
       {
         width: 1200,
         height: 630,
