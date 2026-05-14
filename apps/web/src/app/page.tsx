@@ -12,9 +12,9 @@ import {
   Zap, 
   Layers, 
   CheckCircle2,
-  Github,
-  Twitter,
-  Instagram,
+  Code as Github,
+  Camera as Instagram,
+  Globe as Twitter,
   ChevronRight,
   MessageSquare
 } from 'lucide-react';
