@@ -1,14 +1,19 @@
-import { Controller, Post, Body, Get, UseGuards, Request, Logger, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Request, Logger, UnauthorizedException, Res, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { ConfigService } from '@nestjs/config';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private configService: ConfigService
+  ) {}
 
   @Post('login')
   @ApiOperation({ summary: 'Authenticate user and return JWT' })
@@ -48,5 +53,19 @@ export class AuthController {
   @ApiOperation({ summary: 'Reset password with token' })
   async resetPassword(@Body() dto: any) {
     return this.authService.resetPassword(dto.token, dto.password);
+  }
+
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth(@Req() req) {
+    // Redirects to Google
+  }
+
+  @Get('google/callback')
+  @UseGuards(AuthGuard('google'))
+  async googleAuthRedirect(@Req() req, @Res() res) {
+    const { access_token } = await this.authService.login(req.user);
+    const frontendUrl = this.configService.get('FRONTEND_URL') || 'https://ayragen-web.vercel.app';
+    res.redirect(`${frontendUrl}/auth/callback?token=${access_token}`);
   }
 }
