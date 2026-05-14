@@ -42,7 +42,7 @@ export const ExportModal = ({ isOpen, onClose, websiteId }: {
         setRenderProgress(prev => (prev < 90 ? prev + 2 : prev));
       }, 500);
 
-      const { data } = await apiClient.post(`/websites/${websiteId}/export-video`);
+      const { data } = await apiClient.post(`/websites/${websiteId}/export-video`, {});
       
       clearInterval(progressTimer);
       setRenderProgress(100);
