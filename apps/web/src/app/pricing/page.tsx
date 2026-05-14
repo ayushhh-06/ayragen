@@ -28,7 +28,7 @@ export default function PricingPage() {
           <div className="flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-white/10">
             <Sparkles className="h-3 w-3 text-purple-300" />
           </div>
-          <span className="font-semibold text-sm tracking-tight text-white/90">AuraGen</span>
+          <span className="font-semibold text-sm tracking-tight text-white/90">AyraGen</span>
         </div>
         <div className="w-20" />
       </nav>
@@ -81,7 +81,7 @@ export default function PricingPage() {
             title="Starter"
             price="0"
             icon={<Shield className="w-5 h-5 text-white/40" />}
-            features={['1 Website', '50 AI Credits/mo', 'Basic Templates', 'AuraGen Branding']}
+            features={['1 Website', '50 AI Credits/mo', 'Basic Templates', 'AyraGen Branding']}
             buttonText="Get Started"
             delay={0.3}
           />

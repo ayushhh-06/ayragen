@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { WebsiteManifest } from '@auragen/schema';
+import { WebsiteManifest } from '@ayragen/schema';
 import { CodeGeneratorService } from './code-generator.service';
 import * as fs from 'fs';
 import * as path from 'path';

@@ -31,7 +31,7 @@ export const useAuthStore = create<AuthState>()(
         })),
     }),
     {
-      name: 'auragen-auth-storage',
+      name: 'ayragen-auth-storage',
     }
   )
 );

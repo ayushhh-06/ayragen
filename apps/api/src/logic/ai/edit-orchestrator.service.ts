@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { WebsiteManifest } from '@auragen/schema';
+import { WebsiteManifest } from '@ayragen/schema';
 
 import OpenAI from 'openai';
 
@@ -25,7 +25,7 @@ export class AIEditOrchestrator {
     this.logger.log(`Processing AI edit request: "${editRequest}"`);
 
     const systemPrompt = `
-      You are the "AuraGen Design Editor". You will be given a Website Manifest (JSON) and a user's edit request.
+      You are the "AyraGen Design Editor". You will be given a Website Manifest (JSON) and a user's edit request.
       Your goal is to modify the manifest to fulfill the request while maintaining structural integrity.
       
       TYPES OF EDITS:

@@ -11,7 +11,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
       <aside className="w-64 border-r border-white/5 p-6 flex flex-col gap-8 sticky top-0 h-screen">
         <div className="flex items-center gap-3 px-2">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center font-bold">A</div>
-          <span className="text-xl font-black tracking-tighter">AuraGen</span>
+          <span className="text-xl font-black tracking-tighter">AyraGen</span>
         </div>
 
         <nav className="flex-1 space-y-2">

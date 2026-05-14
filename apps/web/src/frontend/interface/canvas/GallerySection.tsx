@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Section } from '@auragen/schema';
+import { Section } from '@ayragen/schema';
 
 export const GallerySection = ({ section }: { section: Section }) => {
   const { title, subtitle, images } = section.content;

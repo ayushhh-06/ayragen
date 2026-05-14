@@ -91,7 +91,7 @@ export default function ProfilePage() {
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-2">
                     <Sparkles className="w-5 h-5 text-primary" />
-                    <h2 className="font-display text-2xl font-bold">AuraGen Pro</h2>
+                    <h2 className="font-display text-2xl font-bold">AyraGen Pro</h2>
                   </div>
                   <p className="text-white/40 mb-6">Unlimited cinematic generations and 4K exports.</p>
                   

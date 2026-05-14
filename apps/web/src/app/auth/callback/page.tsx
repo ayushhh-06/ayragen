@@ -45,7 +45,7 @@ export default function AuthCallbackPage() {
     <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center text-white font-sans">
       <Loader2 className="w-12 h-12 text-purple-500 animate-spin mb-4" />
       <h2 className="text-xl font-medium tracking-tight">Securing your session...</h2>
-      <p className="text-white/30 text-sm mt-2">Welcome to the AuraGen Studio.</p>
+      <p className="text-white/30 text-sm mt-2">Welcome to the AyraGen Studio.</p>
     </div>
   );
 }

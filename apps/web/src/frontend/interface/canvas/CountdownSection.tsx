@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Section } from '@auragen/schema';
+import { Section } from '@ayragen/schema';
 
 export const CountdownSection = ({ section }: { section: Section }) => {
   const { targetDate, message } = section.content;

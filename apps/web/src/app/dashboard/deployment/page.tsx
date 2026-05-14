@@ -40,7 +40,7 @@ export default function DeploymentPage() {
                 <div>
                   <p className="text-[10px] font-medium text-white/40 uppercase tracking-wide mb-1">Domain</p>
                   <div className="flex items-center gap-2 text-white font-medium">
-                    lovestory.auragen.site <a href="#" className="text-white/40 hover:text-white"><ArrowUpRight className="w-3 h-3" /></a>
+                    lovestory.ayragen.site <a href="#" className="text-white/40 hover:text-white"><ArrowUpRight className="w-3 h-3" /></a>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -83,7 +83,7 @@ export default function DeploymentPage() {
                   <h3 className="text-sm font-medium text-white flex items-center gap-2">
                     ourlovestory.com <span className="text-[9px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/20">Active</span>
                   </h3>
-                  <p className="text-[11px] text-white/40">Redirects to lovestory.auragen.site</p>
+                  <p className="text-[11px] text-white/40">Redirects to lovestory.ayragen.site</p>
                 </div>
               </div>
               <button className="w-8 h-8 flex items-center justify-center text-white/40 hover:text-white rounded-full hover:bg-white/10 transition-colors">

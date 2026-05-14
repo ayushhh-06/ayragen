@@ -146,7 +146,7 @@ export const SceneSidebar = () => {
                     <Sparkles size={14} />
                     <span className="text-[10px] font-black uppercase tracking-widest">AI Mood Swap</span>
                   </div>
-                  <p className="text-xs font-medium text-white/70 leading-relaxed">Let AuraGen reimagine the entire visual atmosphere.</p>
+                  <p className="text-xs font-medium text-white/70 leading-relaxed">Let AyraGen reimagine the entire visual atmosphere.</p>
                 </div>
                 <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-all">
                   <Sparkles size={64} className="text-primary" />

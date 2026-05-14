@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { WebsiteManifest } from '@auragen/schema';
+import { WebsiteManifest } from '@ayragen/schema';
 import { PromptAnalyzer } from './prompt-analyzer.service';
 import { DesignTokenEngine } from './design-token-engine.service';
 import { ContentSynthesizer } from './content-synthesizer.service';

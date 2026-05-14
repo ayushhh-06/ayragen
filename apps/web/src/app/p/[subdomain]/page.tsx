@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { WebsiteManifest } from '@auragen/schema';
+import { WebsiteManifest } from '@ayragen/schema';
 import { Renderer } from '@/frontend/interface/canvas/Renderer';
 import { apiClient } from '@/lib/api-client';
 import { Loader2, Sparkles, AlertCircle, ArrowRight } from 'lucide-react';
@@ -73,7 +73,7 @@ export default function PublicWebsitePage({ params }: { params: { subdomain: str
       <div className="fixed bottom-8 inset-x-8 z-[100] flex justify-between items-end pointer-events-none">
          <div className="pointer-events-auto">
             <div className="flex items-center gap-3 px-4 py-2 bg-black/60 backdrop-blur-xl border border-white/10 rounded-full group cursor-pointer hover:border-primary/40 transition-all">
-               <span className="text-[10px] font-black text-white/40 uppercase tracking-widest group-hover:text-primary transition-all">Made with AuraGen AI</span>
+               <span className="text-[10px] font-black text-white/40 uppercase tracking-widest group-hover:text-primary transition-all">Made with AyraGen AI</span>
                <Sparkles size={12} className="text-primary animate-pulse" />
             </div>
          </div>

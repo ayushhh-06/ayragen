@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Template, WebsiteManifest, Section } from '@auragen/schema';
+import { Template, WebsiteManifest, Section } from '@ayragen/schema';
 
 @Injectable()
 export class TemplateEngineService {
@@ -27,7 +27,7 @@ export class TemplateEngineService {
     return {
       id: Math.random().toString(36).substring(7),
       title: aiContent.globalTitle || 'Your AI Website',
-      description: aiContent.globalDescription || 'Generated with AuraGen',
+      description: aiContent.globalDescription || 'Generated with AyraGen',
       templateId: template.id,
       emotionalTone: aiContent.emotionalTone,
       theme: {

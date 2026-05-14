@@ -28,7 +28,7 @@ export const useGeneration = () => {
 
       socket.on('connect_error', () => {
         // Backend not running — silent fail, stay in idle
-        console.warn('[AuraGen] Backend not connected. Running in offline mode.');
+        console.warn('[AyraGen] Backend not connected. Running in offline mode.');
       });
 
       socket.on('generation_status', (data: { step: string; message: string }) => {
@@ -51,7 +51,7 @@ export const useGeneration = () => {
         socket.disconnect();
       };
     } catch (e) {
-      console.warn('[AuraGen] Socket initialization skipped.');
+      console.warn('[AyraGen] Socket initialization skipped.');
     }
   }, [setStep, setManifest]);
 

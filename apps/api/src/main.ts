@@ -12,7 +12,7 @@ import { join } from 'path';
 import * as fs from 'fs';
 
 async function bootstrap() {
-  const logger = new Logger('AuraGen_Core');
+  const logger = new Logger('AyraGen_Core');
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.setGlobalPrefix('api');
@@ -58,8 +58,8 @@ async function bootstrap() {
 
   // Swagger Documentation
   const config = new DocumentBuilder()
-    .setTitle('AuraGen Cinematic API')
-    .setDescription('The core intelligence and generation engine for AuraGen.')
+    .setTitle('AyraGen Cinematic API')
+    .setDescription('The core intelligence and generation engine for AyraGen.')
     .setVersion('1.0')
     .addBearerAuth()
     .addTag('websites', 'Cinematic website generation and management')
@@ -78,7 +78,7 @@ async function bootstrap() {
   const port = process.env.PORT || 3007;
   await app.listen(port, '0.0.0.0');
 
-  logger.log(`🚀 AuraGen API is live on port: ${port}`);
+  logger.log(`🚀 AyraGen API is live on port: ${port}`);
   logger.log(`🛠️ Filters, Pipes, and Interceptors are active.`);
 }
 bootstrap();

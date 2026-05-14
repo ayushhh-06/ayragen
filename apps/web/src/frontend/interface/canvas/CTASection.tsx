@@ -26,7 +26,7 @@ export const CTASection = ({ section }: { section: any }) => {
           </h2>
           
           <p className="text-xl text-white/40 max-w-2xl mx-auto font-light mb-12">
-            {subtitle || 'Join the thousands of creators who are building beautiful cinematic universes with AuraGen.'}
+            {subtitle || 'Join the thousands of creators who are building beautiful cinematic universes with AyraGen.'}
           </p>
 
           <button className="px-10 py-5 rounded-full bg-white text-black font-bold text-lg shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95 transition-all flex items-center gap-3 mx-auto group">

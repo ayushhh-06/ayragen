@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tablet, Smartphone, Monitor, RefreshCw, CheckCircle } from 'lucide-react';
 import { Renderer } from '@/frontend/interface/canvas/Renderer';
-import { WebsiteManifest } from '@auragen/schema';
+import { WebsiteManifest } from '@ayragen/schema';
 
 export const LivePreview = ({ manifest }: { manifest: WebsiteManifest | null }) => {
   const [device, setDevice] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');

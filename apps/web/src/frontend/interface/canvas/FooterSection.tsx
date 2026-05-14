@@ -12,7 +12,7 @@ export const FooterSection = ({ section }: { section: any }) => {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-primary" />
-          <span className="font-bold text-lg tracking-tight">AuraGen</span>
+          <span className="font-bold text-lg tracking-tight">AyraGen</span>
         </div>
 
         <div className="flex gap-8 text-sm text-white/40 font-light">
@@ -29,7 +29,7 @@ export const FooterSection = ({ section }: { section: any }) => {
       </div>
 
       <div className="max-w-7xl mx-auto mt-12 pt-12 border-t border-white/[0.02] text-center text-[11px] text-white/10 uppercase tracking-widest font-bold">
-        {copyright || `© ${new Date().getFullYear()} AuraGen Experience. All rights reserved.`}
+        {copyright || `© ${new Date().getFullYear()} AyraGen Experience. All rights reserved.`}
       </div>
     </footer>
   );

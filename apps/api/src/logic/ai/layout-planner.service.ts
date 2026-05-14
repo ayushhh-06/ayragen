@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { SectionType } from '@auragen/schema';
+import { SectionType } from '@ayragen/schema';
 import { AnalysisResult } from './prompt-analyzer.service';
 
 @Injectable()

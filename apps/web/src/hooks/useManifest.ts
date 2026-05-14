@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { WebsiteManifest } from '@auragen/schema';
+import { WebsiteManifest } from '@ayragen/schema';
 
 /**
  * Hook to manage the lifecycle of a generated website manifest.

@@ -3,7 +3,7 @@ import './globals.css';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AuraGen | Cinematic Storytelling Engine',
+  title: 'AyraGen | Cinematic Storytelling Engine',
   description: 'Turn your memories into emotionally immersive cinematic universes.',
 };
 

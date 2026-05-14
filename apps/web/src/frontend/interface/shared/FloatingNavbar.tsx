@@ -20,7 +20,7 @@ export const FloatingNavbar = () => {
           <Sparkles className="w-4 h-4 text-white" />
         </div>
         <span className="font-label font-bold text-sm tracking-wide text-white/90 group-hover:text-white transition-colors">
-          AuraGen
+          AyraGen
         </span>
       </Link>
 

@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Music, Pause, Play, Volume2 } from 'lucide-react';
-import { Section } from '@auragen/schema';
+import { Section } from '@ayragen/schema';
 
 export const MusicPlayer = ({ section }: { section: Section }) => {
   const { url, title, artist } = section.content;
@@ -44,7 +44,7 @@ export const MusicPlayer = ({ section }: { section: Section }) => {
       
       <div className="flex flex-col">
         <span className="text-sm font-bold truncate max-w-[150px]">{title || 'Background Music'}</span>
-        <span className="text-xs opacity-60">{artist || 'AuraGen AI'}</span>
+        <span className="text-xs opacity-60">{artist || 'AyraGen AI'}</span>
       </div>
 
       <button

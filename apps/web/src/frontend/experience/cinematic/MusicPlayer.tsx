@@ -14,7 +14,7 @@ interface Soundtrack {
 }
 
 const SOUNDTRACKS: Soundtrack[] = [
-  { id: '1', name: 'Stardust Dreams', artist: 'AuraGen Ambient', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', mood: 'Dreamy' },
+  { id: '1', name: 'Stardust Dreams', artist: 'AyraGen Ambient', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', mood: 'Dreamy' },
   { id: '2', name: 'Eternal Bond', artist: 'Cinematic Soul', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', mood: 'Romantic' },
   { id: '3', name: 'Nostalgic Echo', artist: 'Memory Lane', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', mood: 'Nostalgic' },
 ];

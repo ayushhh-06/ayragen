@@ -1,4 +1,4 @@
-import { WebsiteManifest } from '@auragen/schema';
+import { WebsiteManifest } from '@ayragen/schema';
 
 export interface Template {
   id: string;

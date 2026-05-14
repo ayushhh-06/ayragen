@@ -40,7 +40,7 @@ export default function LandingPage() {
           <div className="flex h-8 w-8 items-center justify-center rounded bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-white/10 shadow-[0_0_20px_rgba(168,85,247,0.2)]">
             <Sparkles className="h-4 w-4 text-purple-300" />
           </div>
-          <span className="font-display font-bold text-xl tracking-tight">AuraGen</span>
+          <span className="font-display font-bold text-xl tracking-tight">AyraGen</span>
         </Link>
         
         <div className="hidden lg:flex items-center gap-8 text-[13px] font-medium text-white/50">
@@ -349,7 +349,7 @@ export default function LandingPage() {
               <div className="flex h-10 w-10 items-center justify-center rounded bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-white/10">
                 <Sparkles className="h-5 w-5 text-purple-300" />
               </div>
-              <span className="font-display font-bold text-2xl tracking-tight">AuraGen</span>
+              <span className="font-display font-bold text-2xl tracking-tight">AyraGen</span>
             </Link>
             <p className="text-white/30 text-sm max-w-xs leading-relaxed">
               The AI platform that turns emotions into cinematic digital experiences.
@@ -367,7 +367,7 @@ export default function LandingPage() {
         </div>
         
         <div className="flex flex-col md:flex-row items-center justify-between pt-12 border-t border-white/[0.03] text-[12px] text-white/20 font-medium">
-          <span>© 2024 AuraGen. All rights reserved.</span>
+          <span>© 2024 AyraGen. All rights reserved.</span>
           <div className="flex gap-8 mt-4 md:mt-0">
             <span className="hover:text-white cursor-pointer transition-colors">Privacy Policy</span>
             <span className="hover:text-white cursor-pointer transition-colors">Terms of Service</span>

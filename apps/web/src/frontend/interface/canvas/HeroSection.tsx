@@ -3,7 +3,7 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { useMoodReactiveStyles } from '@/hooks/useMoodReactiveStyles';
-import { Section } from '@auragen/schema';
+import { Section } from '@ayragen/schema';
 
 export const HeroSection = ({ section }: { section: Section }) => {
   const { title, copy, backgroundImage } = section.content;

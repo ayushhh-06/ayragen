@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { WebsiteManifest, Section } from '@auragen/schema';
+import { WebsiteManifest, Section } from '@ayragen/schema';
 import { HeroSection } from './HeroSection';
 import { FeaturesSection } from './FeaturesSection';
 import { GallerySection } from './GallerySection';

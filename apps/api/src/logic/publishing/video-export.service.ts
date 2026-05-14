@@ -3,7 +3,7 @@ import * as puppeteer from 'puppeteer';
 import ffmpeg from 'fluent-ffmpeg';
 import * as path from 'path';
 import * as fs from 'fs';
-import { WebsiteManifest } from '@auragen/schema';
+import { WebsiteManifest } from '@ayragen/schema';
 import { TelemetryService } from '../common/telemetry.service';
 
 @Injectable()

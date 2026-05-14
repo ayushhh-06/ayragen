@@ -131,11 +131,11 @@ export class WebsiteService {
     const firstSection = manifest.sections[0];
     
     return {
-      title: `${manifest.title} | AuraGen AI`,
-      description: manifest.metadata?.description || `Explore this cinematic digital universe created with AuraGen.`,
-      image: firstSection?.content?.backgroundImage || 'https://auragen.ai/og-default.jpg',
+      title: `${manifest.title} | AyraGen AI`,
+      description: manifest.metadata?.description || `Explore this cinematic digital universe created with AyraGen.`,
+      image: firstSection?.content?.backgroundImage || 'https://ayragen.ai/og-default.jpg',
       themeColor: manifest.theme?.colors?.primary || '#c084fc',
-      url: `https://${website.subdomain}.auragen.ai`,
+      url: `https://${website.subdomain}.ayragen.ai`,
     };
   }
 
@@ -148,7 +148,7 @@ export class WebsiteService {
   }
 
   async deploy(dto: DeployWebsiteDto) {
-    this.logger.log(`Deploying website ${dto.websiteId} to ${dto.subdomain || 'auragen.app'}`);
+    this.logger.log(`Deploying website ${dto.websiteId} to ${dto.subdomain || 'ayragen.app'}`);
     
     try {
       // Integration point for Vercel/Netlify Deployment API
@@ -156,7 +156,7 @@ export class WebsiteService {
       
       return {
         success: true,
-        url: `https://${dto.subdomain || 'site'}.auragen.app`,
+        url: `https://${dto.subdomain || 'site'}.ayragen.app`,
         deployedAt: new Date(),
       };
     } catch (error) {

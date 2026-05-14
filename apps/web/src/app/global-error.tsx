@@ -12,7 +12,7 @@ export default function GlobalError({
 }) {
   useEffect(() => {
     // Log the error to an error reporting service
-    console.error('AuraGen Critical Global Error:', error);
+    console.error('AyraGen Critical Global Error:', error);
   }, [error]);
 
   return (

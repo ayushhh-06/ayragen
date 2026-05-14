@@ -65,7 +65,7 @@ export class SocialService {
                      type: 'span',
                      props: {
                        style: { fontSize: '18px', fontWeight: 900, color: 'white', textTransform: 'uppercase', letterSpacing: '0.2em' },
-                       children: 'AuraGen AI'
+                       children: 'AyraGen AI'
                      }
                    }
                 ]

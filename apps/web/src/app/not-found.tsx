@@ -79,7 +79,7 @@ export default function NotFound() {
       </div>
       
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-xs font-light tracking-[0.3em] uppercase text-white/20">
-        AuraGen System Protocol
+        AyraGen System Protocol
       </div>
     </main>
   );

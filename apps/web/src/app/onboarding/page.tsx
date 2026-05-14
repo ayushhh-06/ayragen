@@ -9,7 +9,7 @@ const steps = [
   {
     id: 'intro',
     title: 'Welcome to the Future of Emotion',
-    subtitle: 'AuraGen isn\'t just a builder. It\'s a cinematic universe for your memories.',
+    subtitle: 'AyraGen isn\'t just a builder. It\'s a cinematic universe for your memories.',
     icon: Sparkles,
     color: 'from-purple-600 to-pink-600',
     highlight: 'Experience'
@@ -135,7 +135,7 @@ export default function OnboardingPage() {
          <div className="w-8 h-8 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center">
             <Sparkles size={14} className="text-purple-400" />
          </div>
-         <span className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">AuraGen v4.0</span>
+         <span className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">AyraGen v4.0</span>
       </div>
     </div>
   );

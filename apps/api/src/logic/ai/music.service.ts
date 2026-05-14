@@ -12,7 +12,7 @@ const CINEMATIC_LIBRARY: Soundtrack[] = [
   { 
     id: 'm1', 
     name: 'Eternal Waltz', 
-    artist: 'AuraGen Orchestral', 
+    artist: 'AyraGen Orchestral', 
     url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', 
     moods: ['romantic', 'anniversary', 'elegant'] 
   },

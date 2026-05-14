@@ -33,7 +33,7 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center mx-auto mb-4 font-bold text-xl text-white shadow-[0_0_30px_rgba(192,132,252,0.3)]">A</div>
           <h1 className="text-3xl font-black text-white mb-2 uppercase tracking-tighter">Welcome Back</h1>
-          <p className="text-white/40 font-medium italic text-xs uppercase tracking-widest">Step back into the future of AuraGen.</p>
+          <p className="text-white/40 font-medium italic text-xs uppercase tracking-widest">Step back into the future of AyraGen.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

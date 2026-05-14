@@ -65,7 +65,7 @@ export default function BuilderPage() {
           <div className="w-8 h-8 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center">
             <Sparkles className="w-4 h-4 text-purple-400" />
           </div>
-          <span className="font-display font-bold tracking-tight text-xl">AuraGen <span className="text-white/20 italic font-light">AI</span></span>
+          <span className="font-display font-bold tracking-tight text-xl">AyraGen <span className="text-white/20 italic font-light">AI</span></span>
         </div>
       </header>
 

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { StickyNote, X } from 'lucide-react';
-import { Section } from '@auragen/schema';
+import { Section } from '@ayragen/schema';
 
 export const PopupNotes = ({ section }: { section: Section }) => {
   const { notes } = section.content;

@@ -79,7 +79,7 @@ export default function AuthPage() {
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.05] border border-white/10 shadow-2xl">
               <Sparkles className="h-5 w-5 text-purple-400" />
             </div>
-            <span className="font-display font-bold text-2xl tracking-tight">AuraGen</span>
+            <span className="font-display font-bold text-2xl tracking-tight">AyraGen</span>
           </Link>
         </motion.div>
 

@@ -45,7 +45,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <div className="flex h-7 w-7 items-center justify-center rounded bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-white/10 shadow-[0_0_15px_rgba(168,85,247,0.2)] group-hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all">
                 <Sparkles className="h-3.5 w-3.5 text-purple-300" />
               </div>
-              <span className="font-semibold text-sm tracking-tight text-white/90">AuraGen</span>
+              <span className="font-semibold text-sm tracking-tight text-white/90">AyraGen</span>
             </Link>
           </div>
 
@@ -104,7 +104,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <div className="flex items-center justify-between mb-10">
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-purple-400" />
-                  <span className="font-bold text-lg">AuraGen</span>
+                  <span className="font-bold text-lg">AyraGen</span>
                 </div>
                 <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 hover:bg-white/5 rounded-full">
                   <X size={20} />

@@ -24,12 +24,12 @@ export class MailService {
 
     try {
       await this.resend.emails.send({
-        from: 'AuraGen <onboarding@resend.dev>',
+        from: 'AyraGen <onboarding@resend.dev>',
         to: email,
-        subject: 'Reset Your AuraGen Password',
+        subject: 'Reset Your AyraGen Password',
         html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #050505; color: white; padding: 40px; border-radius: 20px;">
-            <h2 style="color: #c084fc;">AuraGen Studio</h2>
+            <h2 style="color: #c084fc;">AyraGen Studio</h2>
             <p>You requested a password reset for your cinematic studio account.</p>
             <p>Click the button below to set a new password. This link will expire in 1 hour.</p>
             <a href="${resetUrl}" style="display: inline-block; padding: 12px 24px; background: white; color: black; text-decoration: none; border-radius: 12px; font-weight: bold; margin: 20px 0;">Reset Password</a>

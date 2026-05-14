@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Theme } from '@auragen/schema';
+import { Theme } from '@ayragen/schema';
 
 @Injectable()
 export class ThemeTraitMapper {

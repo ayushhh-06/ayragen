@@ -12,7 +12,7 @@ export const api = axios.create({
 
 // Request Interceptor: Add JWT from localStorage if available
 api.interceptors.request.use((config) => {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('auragen_token') : null;
+  const token = typeof window !== 'undefined' ? localStorage.getItem('ayragen_token') : null;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

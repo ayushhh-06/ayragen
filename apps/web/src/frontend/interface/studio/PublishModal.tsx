@@ -88,7 +88,7 @@ export const PublishModal = ({ isOpen, onClose, websiteId, currentSubdomain }: {
                         className="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-4 pl-12 pr-32 text-white font-medium focus:border-primary/50 transition-all outline-none"
                       />
                       <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-white/20 uppercase tracking-widest">
-                        .auragen.app
+                        .ayragen.app
                       </div>
                     </div>
                     {error && <p className="text-[10px] text-red-400 font-bold uppercase tracking-widest px-2 italic">{error}</p>}

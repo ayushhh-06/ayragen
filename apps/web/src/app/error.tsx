@@ -13,7 +13,7 @@ export default function Error({
 }) {
   useEffect(() => {
     // Log the error to an error reporting service
-    console.error('AuraGen Runtime Error:', error);
+    console.error('AyraGen Runtime Error:', error);
   }, [error]);
 
   return (

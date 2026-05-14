@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { WebsiteManifest, Section } from '@auragen/schema';
+import { WebsiteManifest, Section } from '@ayragen/schema';
 
 export type GenerationStep = 'analyzing' | 'planning' | 'designing' | 'synthesizing' | 'complete' | 'idle';
 
@@ -159,7 +159,7 @@ export const useGenerationStore = create<GenerationState>()(
       }),
     }),
     {
-      name: 'auragen-generation-storage',
+      name: 'ayragen-generation-storage',
       partialize: (state) => ({ history: state.history }),
     }
   )

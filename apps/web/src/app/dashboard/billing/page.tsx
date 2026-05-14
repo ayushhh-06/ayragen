@@ -9,7 +9,7 @@ const plans = [
     name: 'Free',
     price: '$0',
     desc: 'For personal storytellers.',
-    features: ['3 AI Generations / mo', 'Standard Rendering', 'AuraGen Branding', 'Community Themes'],
+    features: ['3 AI Generations / mo', 'Standard Rendering', 'AyraGen Branding', 'Community Themes'],
     button: 'Current Plan',
     current: true
   },
@@ -71,9 +71,9 @@ export default function BillingPage() {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_your_key', 
         amount: order.amount,
         currency: "INR",
-        name: "AuraGen AI",
+        name: "AyraGen AI",
         description: `Upgrade to ${plan} Plan`,
-        image: "https://auragen.ai/logo.png",
+        image: "https://ayragen.ai/logo.png",
         order_id: order.id,
         handler: async function (response: any) {
           // 3. Verify Payment on Backend

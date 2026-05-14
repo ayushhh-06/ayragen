@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Section } from '@auragen/schema';
+import { Section } from '@ayragen/schema';
 
 export const TimelineSection = ({ section }: { section: Section }) => {
   const { events } = section.content;

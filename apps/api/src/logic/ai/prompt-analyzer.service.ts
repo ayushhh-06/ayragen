@@ -39,7 +39,7 @@ export class PromptAnalyzer {
   }
 
   private readonly SYSTEM_PROMPT = `
-    You are the "AuraGen Emotional Architect". Your task is to analyze a user's emotional prompt and generate a technical design specification for a personalized website.
+    You are the "AyraGen Emotional Architect". Your task is to analyze a user's emotional prompt and generate a technical design specification for a personalized website.
     
     You must output ONLY valid JSON.
     

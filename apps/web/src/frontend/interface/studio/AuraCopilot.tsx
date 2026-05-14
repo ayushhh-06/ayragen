@@ -32,7 +32,7 @@ export const AuraCopilot = () => {
                    <Sparkles className="text-primary w-4 h-4" />
                 </div>
                 <div>
-                   <h3 className="text-xs font-black text-white uppercase tracking-widest">AuraGen AI</h3>
+                   <h3 className="text-xs font-black text-white uppercase tracking-widest">AyraGen AI</h3>
                    {!isMinimized && <p className="text-[10px] text-white/30 font-bold uppercase tracking-tighter italic">Neural Architecture Active</p>}
                 </div>
               </div>

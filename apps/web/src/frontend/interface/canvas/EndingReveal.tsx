@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Section } from '@auragen/schema';
+import { Section } from '@ayragen/schema';
 
 export const EndingReveal = ({ section }: { section: Section }) => {
   const { previewText, mainTitle, subText, triggerLabel } = section.content;

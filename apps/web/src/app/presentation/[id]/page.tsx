@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { WebsiteManifest } from '@auragen/schema';
+import { WebsiteManifest } from '@ayragen/schema';
 import { apiClient } from '@/lib/api-client';
 import { Renderer } from '@/frontend/interface/canvas/Renderer';
 import { MusicPlayer } from '@/frontend/experience/cinematic/MusicPlayer';
@@ -140,7 +140,7 @@ export default function PresentationPage({ params }: { params: { id: string } })
 
       {/* Cinematic Metadata Overlay */}
       <div className="fixed top-12 left-12 z-[1000] flex flex-col opacity-20">
-         <span className="text-[10px] font-black text-white uppercase tracking-[0.5em] mb-1">AuraGen Premiere</span>
+         <span className="text-[10px] font-black text-white uppercase tracking-[0.5em] mb-1">AyraGen Premiere</span>
          <span className="text-[8px] font-mono text-white/40 uppercase tracking-widest">{manifest.id} // SCALE: 2.0.0</span>
       </div>
     </div>
