@@ -9,7 +9,7 @@
     "dev": "nest start --watch"
   },
   "dependencies": {
-    "@auragen/schema": "*",
+    "@ayragen/schema": "*",
     "@bull-board/api": "^7.0.0",
     "@bull-board/express": "^7.0.0",
     "@bull-board/nestjs": "^7.0.0",

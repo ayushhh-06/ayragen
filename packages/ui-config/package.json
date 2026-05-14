@@ -1,5 +1,5 @@
 {
-  "name": "@auragen/ui-config",
+  "name": "@ayragen/ui-config",
   "version": "1.0.0",
   "main": "src/index.ts",
   "scripts": {
