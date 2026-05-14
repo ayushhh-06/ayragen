@@ -1,4 +1,4 @@
-# AuraGen Cinematic Platform
+# AyraGen Cinematic Platform
 
 A high-performance monorepo for generating cinematic, emotionally-intelligent websites using AI.
 

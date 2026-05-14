@@ -18,10 +18,12 @@ export const useGeneration = () => {
   useEffect(() => {
     // Gracefully attempt socket connection — don't crash if backend is offline
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
       socketRef.current = io(`${SOCKET_URL}/generation`, {
         transports: ['websocket'],
         reconnection: false,
         timeout: 3000,
+        auth: { token }
       });
 
       const socket = socketRef.current;

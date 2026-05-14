@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Seeding AuraGen Database...');
+  console.log('Seeding AyraGen Database...');
 
   // 1. Create Default Themes
   const themes = [

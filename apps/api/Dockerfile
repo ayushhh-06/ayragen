@@ -7,7 +7,7 @@ RUN npm install -g turbo
 # Prune stage to isolate the API app
 FROM base AS pruner
 COPY . .
-RUN turbo prune auragen-api --docker
+RUN turbo prune ayragen-api --docker
 
 # Installer stage to build the pruned workspace
 FROM base AS installer
@@ -22,7 +22,7 @@ COPY turbo.json turbo.json
 
 # Build the project
 RUN npx prisma generate --schema=apps/api/prisma/schema.prisma
-RUN npm run build --filter=auragen-api...
+RUN npm run build --filter=ayragen-api...
 
 # Runner stage to execute the app
 FROM node:20-alpine AS runner

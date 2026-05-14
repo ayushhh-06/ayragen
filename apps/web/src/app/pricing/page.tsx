@@ -15,18 +15,18 @@ export default function PricingPage() {
     try {
       // In a real production app, we would call the backend to create a Razorpay order
       // For now, we'll simulate the flow or redirect to auth if not logged in
-      const res = await apiClient.post('/payments/create-order', { plan, yearly: isYearly });
+      const res = await apiClient.post('/billing/order', { plan, yearly: isYearly });
       const order = res.data;
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY || 'rzp_test_placeholder',
         amount: order.amount,
         currency: "INR",
-        name: "AyraGen AI",
+        name: "AYRAGEN",
         description: `${plan} Subscription`,
         order_id: order.id,
         handler: function (response: any) {
-          apiClient.post('/payments/verify', response).then(() => {
+          apiClient.post('/billing/verify', response).then(() => {
             window.location.href = '/dashboard';
           });
         },

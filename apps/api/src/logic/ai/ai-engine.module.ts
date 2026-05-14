@@ -25,9 +25,12 @@ import { ExportService } from './export.service';
 import { PrismaModule } from '../../database/prisma.module';
 import { TelemetryService } from '../common/telemetry.service';
 
+import { AuthModule } from '../../security/auth.module';
+
 @Module({
   imports: [
     PrismaModule,
+    AuthModule,
     BullModule.registerQueue({
       name: 'generation',
     }),

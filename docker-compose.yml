@@ -8,7 +8,7 @@ services:
     ports:
       - "3007:3007"
     environment:
-      - DATABASE_URL=postgresql://user:password@db:5432/auragen
+      - DATABASE_URL=postgresql://user:password@db:5432/ayragen
       - REDIS_URL=redis://redis:6379
       - OPENAI_API_KEY=${OPENAI_API_KEY}
     depends_on:
@@ -20,7 +20,7 @@ services:
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=auragen
+      - POSTGRES_DB=ayragen
     ports:
       - "5432:5432"
     volumes:

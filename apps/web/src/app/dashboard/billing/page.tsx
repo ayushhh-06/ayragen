@@ -4,6 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Check, Zap, Crown, CreditCard, ArrowRight, ShieldCheck, Sparkles, Loader2 } from 'lucide-react';
 import { apiClient } from '@/lib/api-client';
+import { useAuthStore } from '@/database/state/useAuthStore';
 
 const plans = [
   {
@@ -32,6 +33,7 @@ const plans = [
 ];
 
 export default function BillingPage() {
+  const { user } = useAuthStore();
   const [loading, setLoading] = React.useState<string | null>(null);
 
   const loadRazorpay = () => {
@@ -56,18 +58,18 @@ export default function BillingPage() {
     }
 
     try {
-      const response = await apiClient.post('/payments/create-order', { plan: plan.toLowerCase() });
+      const response = await apiClient.post('/billing/order', { plan: plan.toLowerCase() });
       const order = response.data;
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY || 'rzp_test_placeholder', 
         amount: order.amount,
         currency: "INR",
-        name: "AyraGen AI",
+        name: "AYRAGEN",
         description: `Upgrade to ${plan} Plan`,
         order_id: order.id,
         handler: async function (response: any) {
-          const verifyRes = await apiClient.post('/payments/verify', {
+          const verifyRes = await apiClient.post('/billing/verify', {
             orderId: response.razorpay_order_id,
             paymentId: response.razorpay_payment_id,
             signature: response.razorpay_signature,
@@ -79,6 +81,10 @@ export default function BillingPage() {
         },
         theme: {
           color: "#c084fc",
+        },
+        prefill: {
+          name: user?.name || '',
+          email: user?.email || '',
         },
       };
 

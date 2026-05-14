@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Calendar, Heart, History, Star, Clock, Compass, Clapperboard, ShieldCheck, Plus, ArrowRight, Play } from 'lucide-react';
+import { Sparkles, Calendar, Heart, History, Star, Clock, Compass, Clapperboard, ShieldCheck, Plus, ArrowRight, Play, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
 import { useEffect, useState } from 'react';
@@ -25,6 +25,7 @@ export const EternalSanctuary = () => {
     };
     fetchLegacies();
   }, []);
+
   return (
     <div className="min-h-screen bg-[#020203] text-white font-body selection:bg-purple-500/30 overflow-x-hidden">
       
@@ -60,42 +61,44 @@ export const EternalSanctuary = () => {
           </div>
         </div>
 
-        {/* Hero Highlight */}
-        <section className="relative group">
-           <motion.div
-             initial={{ opacity: 0, y: 30 }}
-             animate={{ opacity: 1, y: 0 }}
-             className="relative aspect-[21/9] rounded-[48px] overflow-hidden border border-white/[0.08] bg-white/[0.01] group"
-           >
-              <img 
-                src={legacies[0].image} 
-                className="w-full h-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-105 transition-all duration-[3000ms]"
-                alt="Featured Legacy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#020203] via-transparent to-transparent" />
-              
-              <div className="absolute bottom-12 left-12 right-12 flex items-end justify-between">
-                 <div className="space-y-4">
-                    <div className="flex items-center gap-2 text-purple-400">
-                      <Sparkles size={14} />
-                      <span className="text-[10px] font-bold uppercase tracking-[0.3em]">Featured Creation</span>
-                    </div>
-                    <h2 className="text-4xl md:text-6xl font-display font-bold">{legacies[0].title}</h2>
-                    <div className="flex items-center gap-4 text-[11px] font-medium text-white/40 uppercase tracking-widest">
-                       <span>{legacies[0].vibe}</span>
-                       <span className="w-1 h-1 rounded-full bg-white/20" />
-                       <span>{legacies[0].date}</span>
-                    </div>
-                 </div>
-                 
-                 <Link href={`/editor/${legacies[0].id}`} className="px-8 py-4 bg-white/[0.05] hover:bg-white/[0.1] backdrop-blur-3xl text-white text-[12px] font-bold rounded-2xl border border-white/10 transition-all flex items-center gap-3 group/btn">
-                    <Play size={14} className="fill-current" />
-                    Open in Editor
-                    <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-all" />
-                 </Link>
-              </div>
-           </motion.div>
-        </section>
+        {/* Hero Highlight - Only if legacies exist */}
+        {legacies.length > 0 && (
+          <section className="relative group">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="relative aspect-[21/9] rounded-[48px] overflow-hidden border border-white/[0.08] bg-white/[0.01] group"
+            >
+                <img 
+                  src={legacies[0].manifest?.sections?.[0]?.content?.backgroundImage || 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2000'} 
+                  className="w-full h-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-105 transition-all duration-[3000ms]"
+                  alt="Featured Legacy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#020203] via-transparent to-transparent" />
+                
+                <div className="absolute bottom-12 left-12 right-12 flex items-end justify-between">
+                  <div className="space-y-4">
+                      <div className="flex items-center gap-2 text-purple-400">
+                        <Sparkles size={14} />
+                        <span className="text-[10px] font-bold uppercase tracking-[0.3em]">Featured Creation</span>
+                      </div>
+                      <h2 className="text-4xl md:text-6xl font-display font-bold">{legacies[0].title}</h2>
+                      <div className="flex items-center gap-4 text-[11px] font-medium text-white/40 uppercase tracking-widest">
+                        <span>{legacies[0].manifest?.emotionalTone?.vibe || 'Cinematic'}</span>
+                        <span className="w-1 h-1 rounded-full bg-white/20" />
+                        <span>{new Date(legacies[0].createdAt).toLocaleDateString()}</span>
+                      </div>
+                  </div>
+                  
+                  <Link href={`/editor/${legacies[0].id}`} className="px-8 py-4 bg-white/[0.05] hover:bg-white/[0.1] backdrop-blur-3xl text-white text-[12px] font-bold rounded-2xl border border-white/10 transition-all flex items-center gap-3 group/btn">
+                      <Play size={14} className="fill-current" />
+                      Open in Editor
+                      <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-all" />
+                  </Link>
+                </div>
+            </motion.div>
+          </section>
+        )}
 
         {/* Gallery Grid */}
         <section className="space-y-12">
@@ -110,7 +113,7 @@ export const EternalSanctuary = () => {
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/20 animate-pulse">Accessing Vault...</span>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pb-20">
               {legacies.map((legacy, idx) => (
                 <motion.div
                   key={legacy.id}
@@ -142,7 +145,7 @@ export const EternalSanctuary = () => {
                     <div className="space-y-2">
                        <h4 className="text-2xl font-bold font-display">{legacy.title}</h4>
                        <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em]">
-                        {legacy.manifest?.metadata?.theme || 'Cinematic Story'} • {new Date(legacy.createdAt).toLocaleDateString()}
+                        {legacy.manifest?.emotionalTone?.vibe || 'Cinematic Story'} • {new Date(legacy.createdAt).toLocaleDateString()}
                        </p>
                     </div>
                     <Link href={`/editor/${legacy.id}`} className="w-8 h-8 rounded-full border border-white/5 flex items-center justify-center text-white/20 opacity-0 group-hover:opacity-100 transition-all">

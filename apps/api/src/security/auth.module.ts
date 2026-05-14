@@ -24,6 +24,6 @@ import { MailService } from '../logic/common/mail.service';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, GoogleStrategy, MailService],
-  exports: [AuthService],
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {}
