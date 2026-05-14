@@ -46,6 +46,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "satori": "^0.10.13",
     "@resvg/resvg-js": "^2.6.2",
+    "razorpay": "^2.9.4",
     "zod": "^3.22.4"
   },
   "devDependencies": {

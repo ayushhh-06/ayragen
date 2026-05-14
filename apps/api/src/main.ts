@@ -74,10 +74,10 @@ async function bootstrap() {
     credentials: true,
   });
 
-  const port = process.env.PORT || 3001;
-  await app.listen(port, '127.0.0.1');
+  const port = process.env.PORT || 3007;
+  await app.listen(port, '0.0.0.0');
 
-  logger.log(`🚀 AuraGen API is live on: http://localhost:${port}`);
+  logger.log(`🚀 AuraGen API is live on port: ${port}`);
   logger.log(`🛠️ Filters, Pipes, and Interceptors are active.`);
 }
 bootstrap();
