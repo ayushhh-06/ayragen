@@ -13,10 +13,18 @@ export class BillingService {
     private configService: ConfigService,
     private prisma: PrismaService,
   ) {
-    this.razorpay = new Razorpay({
-      key_id: this.configService.get<string>('RAZORPAY_KEY_ID'),
-      key_secret: this.configService.get<string>('RAZORPAY_KEY_SECRET'),
-    });
+    const keyId = this.configService.get<string>('RAZORPAY_KEY_ID');
+    const keySecret = this.configService.get<string>('RAZORPAY_KEY_SECRET');
+
+    if (keyId && keySecret) {
+      this.razorpay = new Razorpay({
+        key_id: keyId,
+        key_secret: keySecret,
+      });
+      this.logger.log('💳 Razorpay initialized successfully.');
+    } else {
+      this.logger.warn('⚠️ Razorpay keys missing. Payment features will be disabled.');
+    }
   }
 
   async createOrder(userId: string, plan: 'pro' | 'premium') {
