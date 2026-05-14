@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useGenerationStore } from '@/database/state/useGenerationStore';
-import { Renderer } from '@/components/engine/Renderer';
+import { Renderer } from '@/frontend/interface/canvas/Renderer';
 
 export const Artboard = () => {
   const { viewMode, zoom, manifest, selectedSectionId, setSelectedSection } = useGenerationStore();
