@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -36,11 +36,11 @@ model RefreshToken {
 
 // SQLite does not support native enums. 
 // Re-enable these when migrating back to PostgreSQL.
-// enum Role {
-//   USER
-//   ADMIN
-//   CREATOR
-// }
+enum Role {
+  USER
+  ADMIN
+  CREATOR
+}
 
 model Project {
   id                String             @id @default(cuid())
@@ -59,7 +59,7 @@ model Template {
   id                String             @id @default(cuid())
   name              String
   description       String?
-  baseConfig        String             // Json for PostgreSQL
+  baseConfig        Json             // Json for PostgreSQL
   websites          GeneratedWebsite[]
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
@@ -68,7 +68,7 @@ model Template {
 model Theme {
   id                String             @id @default(cuid())
   name              String
-  config            String             // Json for PostgreSQL
+  config            Json             // Json for PostgreSQL
   websites          GeneratedWebsite[]
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
@@ -78,7 +78,7 @@ model GeneratedWebsite {
   id            String          @id @default(cuid())
   title         String
   description   String?
-  manifest      String          // Json for PostgreSQL
+  manifest      Json          // Json for PostgreSQL
   projectId     String
   project       Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
   templateId    String?
@@ -103,8 +103,8 @@ model EditHistory {
   websiteId     String
   website       GeneratedWebsite @relation(fields: [websiteId], references: [id], onDelete: Cascade)
   changeSummary String
-  previousState String           // Json for PostgreSQL
-  newState      String           // Json for PostgreSQL
+  previousState Json           // Json for PostgreSQL
+  newState      Json           // Json for PostgreSQL
   createdAt     DateTime         @default(now())
 
   @@index([websiteId])
@@ -143,8 +143,8 @@ model AIJob {
   type        String    // generation, render, analyze
   status      String    @default("PENDING") // Enum: PENDING, PROCESSING, COMPLETED, FAILED
   progress    Int       @default(0)
-  payload     String    // Json for PostgreSQL
-  result      String?   // Json for PostgreSQL
+  payload     Json    // Json for PostgreSQL
+  result      Json?   // Json for PostgreSQL
   error       String?
   startedAt   DateTime?
   completedAt DateTime?
@@ -173,23 +173,23 @@ model CreditBalance {
   updatedAt DateTime @updatedAt
 }
 
-// enum AssetType {
-//   IMAGE
-//   VIDEO
-//   AUDIO
-//   OTHER
-// }
-//
-// enum JobStatus {
-//   PENDING
-//   PROCESSING
-//   COMPLETED
-//   FAILED
-// }
-//
-// enum SubscriptionStatus {
-//   ACTIVE
-//   INACTIVE
-//   CANCELED
-//   PAST_DUE
-// }
+enum AssetType {
+  IMAGE
+  VIDEO
+  AUDIO
+  OTHER
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
+  CANCELED
+  PAST_DUE
+}
