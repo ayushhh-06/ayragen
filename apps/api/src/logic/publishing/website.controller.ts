@@ -132,13 +132,21 @@ export class WebsiteController {
     return this.websiteService.export(website.manifest);
   }
 
-  @Post(':id/export-video')
-  @ApiOperation({ summary: 'Generate cinematic video of the website' })
-  async exportVideo(@Param('id') id: string, @Request() req) {
-    this.logger.log(`Triggering cinematic video export for website: ${id}`);
-    const website = await this.websiteService.getWebsiteById(id, req.user.userId);
-    return this.videoService.renderManifestToVideo(website.manifest, req.user.userId);
+  @Post(':id/save')
+  @ApiOperation({ summary: 'Save website manifest changes' })
+  async saveWebsiteChanges(@Param('id') id: string, @Body() dto: { manifest: any }, @Request() req) {
+    this.logger.log(`Saving changes for website: ${id}`);
+    await this.websiteService.validateOwnership(id, req.user.userId);
+    return this.prisma.generatedWebsite.update({
+      where: { id },
+      data: {
+        manifest: dto.manifest,
+        updatedAt: new Date(),
+      }
+    });
   }
+
+  @Post(':id/export-video')
 
   @Get(':id/og')
   @ApiOperation({ summary: 'Generate and get the OG image for a website' })

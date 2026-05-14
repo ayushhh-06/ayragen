@@ -10,36 +10,57 @@ import { AuraCopilot } from '@/frontend/interface/studio/AuraCopilot';
 import { AuraWorkspace } from '@/frontend/interface/studio/AuraWorkspace';
 import { useGenerationStore } from '@/database/state/useGenerationStore';
 import { Loader2, Sparkles } from 'lucide-react';
+import { apiClient } from '@/lib/api-client';
 
 export default function EditorPageV2({ params }: { params: { id: string } }) {
-  const { manifest, isGenerating } = useGenerationStore();
+  const { manifest, setManifest, isGenerating } = useGenerationStore();
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
 
-  // Handle keyboard shortcuts
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'z') {
-        // Undo/Redo logic handled in store, but could trigger here
+    const fetchManifest = async () => {
+      if (manifest?.id === params.id) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await apiClient.get(`/websites/${params.id}`);
+        setManifest(res.data.manifest);
+      } catch (err) {
+        console.error('Failed to load universe:', err);
+        setError(true);
+      } finally {
+        setLoading(false);
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+    fetchManifest();
+  }, [params.id, setManifest]);
 
-  if (!manifest && !isGenerating) {
+  if (loading) {
     return (
-      <div className="h-screen w-full bg-[#050505] flex flex-col items-center justify-center text-center p-12">
-         <div className="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-8">
-            <Sparkles className="text-primary w-10 h-10 animate-pulse" />
+      <div className="h-screen w-full bg-[#020203] flex flex-col items-center justify-center gap-6">
+        <Loader2 className="w-12 h-12 text-purple-500 animate-spin" />
+        <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/20 animate-pulse">Reconstructing Universe...</span>
+      </div>
+    );
+  }
+
+  if (error || (!manifest && !isGenerating)) {
+    return (
+      <div className="h-screen w-full bg-[#020203] flex flex-col items-center justify-center text-center p-12">
+         <div className="w-20 h-20 rounded-[32px] bg-white/[0.02] border border-white/10 flex items-center justify-center mb-8 shadow-2xl">
+            <Sparkles className="text-purple-500 w-10 h-10 animate-pulse" />
          </div>
-         <h1 className="text-3xl font-black text-white mb-4 uppercase tracking-widest">No Active Universe</h1>
-         <p className="text-white/40 max-w-md mx-auto leading-relaxed italic mb-8">
-           It seems you haven't ignited an AI generation yet, or the session has expired. Return to the builder to create something magical.
+         <h1 className="text-3xl font-bold text-white mb-4 font-display">Universe Out of Reach</h1>
+         <p className="text-white/40 max-w-sm mx-auto leading-relaxed italic mb-10 text-sm">
+           This cinematic vision has faded or you do not have the proper encryption keys to access it.
          </p>
          <button 
-           onClick={() => window.location.href = '/builder'}
-           className="px-8 py-4 bg-primary text-white font-black uppercase tracking-widest rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all"
+           onClick={() => window.location.href = '/dashboard'}
+           className="px-10 py-4 bg-white text-black font-bold uppercase tracking-widest text-[11px] rounded-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all"
           >
-           Back to Builder
+           Back to Sanctuary
          </button>
       </div>
     );

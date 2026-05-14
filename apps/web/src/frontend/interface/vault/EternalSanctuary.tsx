@@ -5,26 +5,26 @@ import { motion } from 'framer-motion';
 import { Sparkles, Calendar, Heart, History, Star, Clock, Compass, Clapperboard, ShieldCheck, Plus, ArrowRight, Play } from 'lucide-react';
 import Link from 'next/link';
 
-const legacies = [
-  { 
-    id: 'L1', 
-    title: 'The Midnight Muse', 
-    date: 'Oct 2026', 
-    type: 'Legacy Story', 
-    vibe: 'Romantic Noir', 
-    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1200&auto=format&fit=crop' 
-  },
-  { 
-    id: 'L2', 
-    title: 'Golden Hour Memories', 
-    date: 'Aug 2025', 
-    type: 'Family Journey', 
-    vibe: 'Ethereal Warmth', 
-    image: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=1200&auto=format&fit=crop' 
-  },
-];
+import { useEffect, useState } from 'react';
+import { apiClient } from '@/lib/api-client';
 
 export const EternalSanctuary = () => {
+  const [legacies, setLegacies] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLegacies = async () => {
+      try {
+        const res = await apiClient.get('/websites');
+        setLegacies(res.data);
+      } catch (err) {
+        console.error('Failed to fetch legacies:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLegacies();
+  }, []);
   return (
     <div className="min-h-screen bg-[#020203] text-white font-body selection:bg-purple-500/30 overflow-x-hidden">
       
@@ -104,54 +104,63 @@ export const EternalSanctuary = () => {
             <span className="text-[10px] text-white/40">{legacies.length} Stories Saved</span>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-             {legacies.map((legacy, idx) => (
-               <motion.div
-                 key={legacy.id}
-                 whileHover={{ y: -10 }}
-                 className="relative group space-y-8"
-               >
+          {loading ? (
+            <div className="py-32 flex flex-col items-center justify-center gap-6">
+              <Loader2 className="w-12 h-12 text-purple-500 animate-spin" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/20 animate-pulse">Accessing Vault...</span>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              {legacies.map((legacy, idx) => (
+                <motion.div
+                  key={legacy.id}
+                  whileHover={{ y: -10 }}
+                  className="relative group space-y-8"
+                >
                   <div className="relative aspect-video rounded-[32px] overflow-hidden border border-white/[0.08] bg-white/[0.01]">
-                     <img 
-                       src={legacy.image} 
-                       className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-[2000ms]"
-                       alt={legacy.title}
-                     />
-                     <div className="absolute inset-0 bg-gradient-to-t from-[#020203] via-transparent to-transparent opacity-80" />
-                     
-                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100">
-                        <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-2xl border border-white/20 flex items-center justify-center">
-                           <Play size={24} className="fill-white translate-x-0.5" />
-                        </div>
-                     </div>
+                    <img 
+                      src={legacy.manifest?.sections?.[0]?.content?.backgroundImage || 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=1200'} 
+                      className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-[2000ms]"
+                      alt={legacy.title}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#020203] via-transparent to-transparent opacity-80" />
+                    
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100">
+                      <Link href={`/editor/${legacy.id}`} className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-2xl border border-white/20 flex items-center justify-center">
+                        <Play size={24} className="fill-white translate-x-0.5" />
+                      </Link>
+                    </div>
 
-                     <div className="absolute top-6 right-6">
-                        <div className="w-10 h-10 rounded-2xl bg-white/5 backdrop-blur-3xl border border-white/10 flex items-center justify-center text-white/20 group-hover:text-pink-400 transition-all">
-                           <Heart size={18} />
-                        </div>
-                     </div>
+                    <div className="absolute top-6 right-6">
+                      <div className="w-10 h-10 rounded-2xl bg-white/5 backdrop-blur-3xl border border-white/10 flex items-center justify-center text-white/20 group-hover:text-pink-400 transition-all">
+                        <Heart size={18} />
+                      </div>
+                    </div>
                   </div>
                   
                   <div className="px-4 flex justify-between items-center">
                     <div className="space-y-2">
                        <h4 className="text-2xl font-bold font-display">{legacy.title}</h4>
-                       <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em]">{legacy.type} • {legacy.date}</p>
+                       <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em]">
+                        {legacy.manifest?.metadata?.theme || 'Cinematic Story'} • {new Date(legacy.createdAt).toLocaleDateString()}
+                       </p>
                     </div>
-                    <div className="w-8 h-8 rounded-full border border-white/5 flex items-center justify-center text-white/20 opacity-0 group-hover:opacity-100 transition-all">
+                    <Link href={`/editor/${legacy.id}`} className="w-8 h-8 rounded-full border border-white/5 flex items-center justify-center text-white/20 opacity-0 group-hover:opacity-100 transition-all">
                        <ArrowRight size={16} />
-                    </div>
+                    </Link>
                   </div>
-               </motion.div>
-             ))}
+                </motion.div>
+              ))}
 
-             {/* Create New Placeholder */}
-             <Link href="/builder" className="relative aspect-video rounded-[32px] border-2 border-dashed border-white/[0.05] hover:border-purple-500/30 transition-all flex flex-col items-center justify-center gap-4 group">
+              {/* Create New Placeholder */}
+              <Link href="/builder" className="relative aspect-video rounded-[32px] border-2 border-dashed border-white/[0.05] hover:border-purple-500/30 transition-all flex flex-col items-center justify-center gap-4 group">
                 <div className="w-16 h-16 rounded-3xl bg-white/[0.02] border border-white/[0.05] flex items-center justify-center group-hover:scale-110 transition-all">
                    <Plus size={32} className="text-white/20 group-hover:text-purple-400" />
                 </div>
                 <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-white/10 group-hover:text-white/40">Create a New Universe</span>
-             </Link>
-          </div>
+              </Link>
+            </div>
+          )}
         </section>
 
       </div>
