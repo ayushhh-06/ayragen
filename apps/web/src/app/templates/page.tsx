@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-presence';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, Search, Filter, ArrowUpRight, Heart, 
   Layers, Palette, Play, ChevronRight, Wand2
