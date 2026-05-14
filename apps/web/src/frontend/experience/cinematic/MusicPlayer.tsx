@@ -28,18 +28,18 @@ export const MusicPlayer = ({ autoPlay = false }: { autoPlay?: boolean }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    if (manifest?.soundtrack) {
-      setCurrentTrack(manifest.soundtrack as any);
+    if ((manifest as any)?.soundtrack) {
+      setCurrentTrack((manifest as any).soundtrack as any);
     }
-  }, [manifest?.soundtrack]);
+  }, [(manifest as any)?.soundtrack]);
 
   useEffect(() => {
-    if ((autoPlay || manifest?.soundtrack) && audioRef.current) {
+    if ((autoPlay || (manifest as any)?.soundtrack) && audioRef.current) {
       audioRef.current.play().catch(() => {
         console.warn('Autoplay blocked by browser. User interaction required.');
       });
     }
-  }, [autoPlay, manifest?.soundtrack, currentTrack]);
+  }, [autoPlay, (manifest as any)?.soundtrack, currentTrack]);
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -116,7 +116,7 @@ export const MusicPlayer = ({ autoPlay = false }: { autoPlay?: boolean }) => {
             <div className="absolute -top-12 right-0 px-4 py-2 bg-primary/20 backdrop-blur-md border border-primary/30 rounded-2xl flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all">
                <Sparkles size={10} className="text-primary animate-pulse" />
                <span className="text-[8px] font-black text-primary uppercase tracking-[0.2em]">
-                 Atmosphere: {currentTrack.mood || manifest?.emotionalTone?.vibe || 'Cinematic'}
+                 Atmosphere: {currentTrack.mood || (manifest as any)?.emotionalTone?.vibe || 'Cinematic'}
                </span>
             </div>
           </motion.div>
