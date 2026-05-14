@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Sparkles, X, Instagram, Github } from 'lucide-react';
+import { Sparkles, X, Camera, Code2 } from 'lucide-react';
 import Link from 'next/link';
 
 export const FooterSection = ({ section }: { section: any }) => {
@@ -23,8 +23,8 @@ export const FooterSection = ({ section }: { section: any }) => {
 
         <div className="flex items-center gap-6 text-white/20">
           <X className="w-4 h-4 hover:text-white cursor-pointer transition-all" />
-          <Instagram className="w-4 h-4 hover:text-white cursor-pointer transition-colors" />
-          <Github className="w-4 h-4 hover:text-white cursor-pointer transition-colors" />
+          <Camera className="w-4 h-4 hover:text-white cursor-pointer transition-all" />
+          <Code2 className="w-4 h-4 hover:text-white cursor-pointer transition-all" />
         </div>
       </div>
 

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tablet, Smartphone, Monitor, RefreshCw, CheckCircle } from 'lucide-react';
-import { Renderer } from '../engine/Renderer';
+import { Renderer } from '@/frontend/interface/canvas/Renderer';
 import { WebsiteManifest } from '@auragen/schema';
 
 export const LivePreview = ({ manifest }: { manifest: WebsiteManifest | null }) => {
