@@ -109,7 +109,7 @@ export class GenerationOrchestrator {
             projectId: context.projectId,
             title: manifest.title,
             description: manifest.description,
-            manifest: JSON.stringify(manifest),
+            manifest: manifest,
           }
         });
       }

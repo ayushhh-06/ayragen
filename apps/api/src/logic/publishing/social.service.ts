@@ -14,7 +14,7 @@ export class SocialService {
     const website = await this.prisma.generatedWebsite.findUnique({ where: { id: websiteId } });
     if (!website) throw new Error('Website not found');
 
-    const manifest = JSON.parse(website.manifest as string);
+    const manifest = website.manifest as any;
     const title = manifest.title || 'Untitled Vision';
     const vibe = manifest.emotionalTone?.vibe || 'Draft';
     const bgImage = manifest.sections[0]?.content?.backgroundImage || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe';

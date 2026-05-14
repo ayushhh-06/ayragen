@@ -60,7 +60,7 @@ export class WebsiteService {
         projectId,
         title: manifest.title,
         description: manifest.description,
-        manifest: JSON.stringify(manifest), // Convert to String for SQLite compatibility
+        manifest: manifest, // Using native JSON field
       },
     });
   }
@@ -86,7 +86,7 @@ export class WebsiteService {
     const website = await this.validateOwnership(id, userId);
     return {
       ...website,
-      manifest: JSON.parse(website.manifest)
+      manifest: website.manifest as any
     };
   }
 
@@ -119,7 +119,7 @@ export class WebsiteService {
     return {
       id: website.id,
       title: website.title,
-      manifest: JSON.parse(website.manifest)
+      manifest: website.manifest as any
     };
   }
 
@@ -127,7 +127,7 @@ export class WebsiteService {
     const website = await this.prisma.generatedWebsite.findUnique({ where: { id: websiteId } });
     if (!website) return null;
 
-    const manifest = JSON.parse(website.manifest as string);
+    const manifest = website.manifest as any;
     const firstSection = manifest.sections[0];
     
     return {
