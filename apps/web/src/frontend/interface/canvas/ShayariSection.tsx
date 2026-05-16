@@ -1,26 +1,26 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Section } from '@ayragen/schema';
 import { Heart } from 'lucide-react';
 
-export const ShayariSection = ({ section }: { section: Section }) => {
-  const { lines, author, category } = section.content;
+export const ShayariSection = ({ section: sectionData }: { section: Section }) => {
+  const { lines, author, category } = sectionData.content;
 
   // Cinematic Particles for this section
-  const particles = Array.from({ length: 15 }).map((_, i) => ({
+  const particles = useMemo(() => Array.from({ length: 15 }).map((_, i) => ({
     id: i,
     x: Math.random() * 100,
     y: Math.random() * 100,
     duration: 10 + Math.random() * 20,
     delay: Math.random() * 10,
     scale: 0.5 + Math.random() * 1,
-  }));
+  })), []);
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center py-24 px-6 overflow-hidden bg-[#050505]">
-      {/* Floating Mood Particles (Inspired by user's site) */}
+      {/* Floating Mood Particles */}
       <div className="absolute inset-0 pointer-events-none z-0">
         {particles.map((p) => (
           <motion.div
@@ -58,7 +58,6 @@ export const ShayariSection = ({ section }: { section: Section }) => {
       >
         <div className="space-y-12">
           {lines?.map((lineSet: any, i: number) => {
-            // Handle both string and object { hindi, english }
             const hindi = typeof lineSet === 'string' ? lineSet : lineSet.hindi;
             const english = typeof lineSet === 'string' ? null : lineSet.english;
 
@@ -100,9 +99,8 @@ export const ShayariSection = ({ section }: { section: Section }) => {
             </span>
           </motion.footer>
         )}
-      </div>
+      </motion.div>
 
-      {/* Cinematic Vignette */}
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)] z-20" />
     </section>
   );
