@@ -27,6 +27,8 @@ const SECTION_COMPONENTS: Record<string, any> = {
 };
 
 export const Renderer = ({ manifest }: { manifest: WebsiteManifest }) => {
+  const [hasEntered, setHasEntered] = React.useState(false);
+  
   if (!manifest || !manifest.sections) return null;
 
   return (
