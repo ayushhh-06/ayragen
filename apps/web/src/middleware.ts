@@ -2,9 +2,29 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('access_token')?.value;
   const { pathname } = request.nextUrl;
+  const hostname = request.headers.get('host') || '';
+  const token = request.cookies.get('access_token')?.value;
 
+  // Define domains to exclude from subdomain routing
+  const rootDomains = ['localhost:3000', 'ayragen.com', 'ayragen.vercel.app'];
+  
+  // Check if current host is a root domain
+  const isRootDomain = rootDomains.includes(hostname);
+
+  // If it's a subdomain, rewrite to /p/[subdomain]
+  if (!isRootDomain && !pathname.startsWith('/_next') && !pathname.startsWith('/api') && !pathname.startsWith('/p/')) {
+    const subdomain = hostname.split('.')[0];
+    
+    // Check if it's not just "www"
+    if (subdomain && subdomain !== 'www') {
+      console.log(`[MIDDLEWARE] Rewriting ${hostname}${pathname} to /p/${subdomain}${pathname}`);
+      return NextResponse.rewrite(new URL(`/p/${subdomain}${pathname}`, request.url));
+    }
+  }
+
+  // --- STANDARD AUTH PROTECTION ---
+  
   // Protected routes
   const protectedPaths = ['/dashboard', '/builder', '/editor', '/profile'];
   const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
@@ -25,5 +45,14 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/builder/:path*', '/editor/:path*', '/profile/:path*', '/auth'],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
 };

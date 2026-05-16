@@ -14,8 +14,27 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
       ? exception.getStatus()
       : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    this.logger.error(`[EXCEPTION] ${request.method} ${request.url} STATUS:${status} ERROR:${(exception as any).message}`);
+    const message = exception instanceof HttpException 
+      ? exception.getResponse() 
+      : (exception as any).message || 'The Neural Link has faded into the void.';
 
-    super.catch(exception, host);
+    this.logger.error(`[AURA_FAULT] ${request.method} ${request.url} STATUS:${status}`);
+
+    response.status(status).json({
+      statusCode: status,
+      auraCode: this.getAuraCode(status),
+      message: typeof message === 'object' ? (message as any).message : message,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+      suggestedAuraAction: 'Attempting to restabilize neural frequencies...'
+    });
+  }
+
+  private getAuraCode(status: number): string {
+    if (status === 404) return 'NEURAL_VOID_NOT_FOUND';
+    if (status === 403) return 'FORBIDDEN_GATE_LOCKED';
+    if (status === 401) return 'UNAUTHORIZED_ESSENCE';
+    if (status >= 500) return 'CORE_STABILITY_FAILURE';
+    return 'UNKNOWN_DISTURBANCE';
   }
 }

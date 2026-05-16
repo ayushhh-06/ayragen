@@ -49,27 +49,6 @@ export default function PricingPage() {
   return (
     <main className="min-h-screen bg-[#020203] text-white font-body selection:bg-purple-500/30 overflow-x-hidden relative">
       
-      {/* Background Ambience */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-purple-900/10 blur-[150px] mix-blend-screen" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-indigo-900/10 blur-[150px] mix-blend-screen" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay" />
-      </div>
-
-      <nav className="relative z-50 w-full p-8 flex justify-between items-center max-w-7xl mx-auto">
-        <Link href="/dashboard" className="flex items-center gap-2 text-white/40 hover:text-white transition-all group">
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.3em]">Studio</span>
-        </Link>
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center">
-            <ShieldCheck className="w-4 h-4 text-purple-400" />
-          </div>
-          <span className="font-display font-bold text-xl tracking-tight">AyraGen <span className="text-white/20 italic font-light">Plans</span></span>
-        </div>
-        <div className="w-20" />
-      </nav>
-
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 flex flex-col items-center">
         
         <header className="text-center mb-20 space-y-6">

@@ -29,7 +29,7 @@ export class AIEditOrchestrator {
       Your goal is to modify the manifest to fulfill the request while maintaining structural integrity.
       
       TYPES OF EDITS:
-      - Theme: Update colors, particles, or typography.
+      - Theme: Update colors, particles, typography, or design tokens ({ borderRadius: 'none'|'soft'|'rounded', buttonStyle: 'glass'|'solid'|'outline', grainIntensity: number }).
       - Content: Rewrite text in sections.
       - Animations: Adjust mood or intensity.
       - Sections: Add, remove, or reorder sections.

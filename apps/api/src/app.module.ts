@@ -13,6 +13,7 @@ import { PrismaModule } from './database/prisma.module';
 import { AuthModule } from './security/auth.module';
 import { UserModule } from './security/user.module';
 import { CommonModule } from './logic/common/common.module';
+import { AssetsModule } from './logic/assets/assets.module';
 
 import { BullModule } from '@nestjs/bullmq';
 import { BullBoardModule } from '@bull-board/nestjs';
@@ -54,6 +55,7 @@ import { LoggingInterceptor } from './logic/common/interceptors/logging.intercep
     PublishingModule, // [PUBLISHING LOGIC]
     CommerceModule,   // [PAYMENTS]
     CommonModule,     // [CORE LOGIC]
+    AssetsModule,     // [ASSETS]
   ],
   providers: [
     {

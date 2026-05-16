@@ -3,6 +3,7 @@ import { WebsiteManifest } from '@ayragen/schema';
 import { PromptAnalyzer, AnalysisResult } from './prompt-analyzer.service';
 import { ContentSynthesizer } from './content-synthesizer.service';
 import { ThemeTraitMapper } from './theme-trait-mapper.service';
+import { MediaService } from './media.service';
 import { TelemetryService } from '../common/telemetry.service';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class GenerationService {
     private readonly analyzer: PromptAnalyzer,
     private readonly synthesizer: ContentSynthesizer,
     private readonly themeMapper: ThemeTraitMapper,
+    private readonly mediaService: MediaService,
     private readonly telemetry: TelemetryService,
   ) {}
 
@@ -78,10 +80,22 @@ export class GenerationService {
     this.logger.log(`Synthesizing content for section: ${section.type}`);
     const content = await this.synthesizer.synthesizeSection(section.type, analysis);
     
+    // Fetch relevant images based on section type and analysis
+    let images: string[] = [];
+    if (section.type === 'HeroSection') {
+      images = await this.mediaService.searchCinematicImages(`${analysis.emotion} ${analysis.vibe} background`, 1);
+    } else if (section.type === 'GallerySection') {
+      images = await this.mediaService.searchCinematicImages(`${analysis.emotion} ${analysis.category}`, 6);
+    }
+
     return {
       ...section,
       title: content.title || section.type,
-      content: content,
+      content: {
+        ...content,
+        backgroundImage: images[0] || content.backgroundImage,
+        images: images.length > 1 ? images : content.images,
+      },
     };
   }
 }

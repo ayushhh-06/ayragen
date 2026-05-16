@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -45,13 +45,33 @@ model PasswordResetToken {
   @@index([userId])
 }
 
-// SQLite does not support native enums. 
-// Re-enable these when migrating back to PostgreSQL.
-enum Role {
-  USER
-  ADMIN
-  CREATOR
-}
+// SQLite fallbacks for Enums
+// enum Role {
+//   USER
+//   ADMIN
+//   CREATOR
+// }
+
+// enum AssetType {
+//   IMAGE
+//   VIDEO
+//   AUDIO
+//   OTHER
+// }
+
+// enum JobStatus {
+//   PENDING
+//   PROCESSING
+//   COMPLETED
+//   FAILED
+// }
+
+// enum SubscriptionStatus {
+//   ACTIVE
+//   INACTIVE
+//   CANCELED
+//   PAST_DUE
+// }
 
 model Project {
   id                String             @id @default(cuid())
@@ -70,7 +90,7 @@ model Template {
   id                String             @id @default(cuid())
   name              String
   description       String?
-  baseConfig        Json             // Json for PostgreSQL
+  baseConfig        String             // String for SQLite (JSON in PostgreSQL)
   websites          GeneratedWebsite[]
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
@@ -79,7 +99,7 @@ model Template {
 model Theme {
   id                String             @id @default(cuid())
   name              String
-  config            Json             // Json for PostgreSQL
+  config            String             // String for SQLite (JSON in PostgreSQL)
   websites          GeneratedWebsite[]
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
@@ -89,7 +109,7 @@ model GeneratedWebsite {
   id            String          @id @default(cuid())
   title         String
   description   String?
-  manifest      Json          // Json for PostgreSQL
+  manifest      String          // String for SQLite (JSON in PostgreSQL)
   projectId     String
   project       Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
   templateId    String?
@@ -101,6 +121,9 @@ model GeneratedWebsite {
   isPublished   Boolean         @default(false)
   subdomain     String?         @unique
   customDomain  String?         @unique
+  plan          String          @default("GENESIS") // GENESIS, ARCHITECT
+  paymentStatus String          @default("UNPAID")  // UNPAID, PAID
+  reactions     Int             @default(0)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 
@@ -114,8 +137,8 @@ model EditHistory {
   websiteId     String
   website       GeneratedWebsite @relation(fields: [websiteId], references: [id], onDelete: Cascade)
   changeSummary String
-  previousState Json           // Json for PostgreSQL
-  newState      Json           // Json for PostgreSQL
+  previousState String           // String for SQLite (JSON in PostgreSQL)
+  newState      String           // String for SQLite (JSON in PostgreSQL)
   createdAt     DateTime         @default(now())
 
   @@index([websiteId])
@@ -154,8 +177,8 @@ model AIJob {
   type        String    // generation, render, analyze
   status      String    @default("PENDING") // Enum: PENDING, PROCESSING, COMPLETED, FAILED
   progress    Int       @default(0)
-  payload     Json    // Json for PostgreSQL
-  result      Json?   // Json for PostgreSQL
+  payload     String    // String for SQLite (JSON in PostgreSQL)
+  result      String?   // String for SQLite (JSON in PostgreSQL)
   error       String?
   startedAt   DateTime?
   completedAt DateTime?
@@ -182,25 +205,4 @@ model CreditBalance {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   amount    Int      @default(0)
   updatedAt DateTime @updatedAt
-}
-
-enum AssetType {
-  IMAGE
-  VIDEO
-  AUDIO
-  OTHER
-}
-
-enum JobStatus {
-  PENDING
-  PROCESSING
-  COMPLETED
-  FAILED
-}
-
-enum SubscriptionStatus {
-  ACTIVE
-  INACTIVE
-  CANCELED
-  PAST_DUE
 }

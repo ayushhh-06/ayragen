@@ -20,8 +20,8 @@ export class BillingController {
   @UseGuards(JwtAuthGuard)
   @Post('order')
   @ApiOperation({ summary: 'Create a Razorpay order' })
-  async createOrder(@Body() dto: { plan: 'pro' | 'premium' }, @Request() req) {
-    return this.billingService.createOrder(req.user.userId, dto.plan);
+  async createOrder(@Body() dto: { plan: 'pro' | 'premium' | 'architect', websiteId?: string }, @Request() req) {
+    return this.billingService.createOrder(req.user.userId, dto.plan, dto.websiteId);
   }
 
   @UseGuards(JwtAuthGuard)

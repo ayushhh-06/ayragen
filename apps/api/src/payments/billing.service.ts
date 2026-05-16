@@ -27,18 +27,21 @@ export class BillingService {
     }
   }
 
-  async createOrder(userId: string, plan: 'pro' | 'premium') {
-    const amount = plan === 'pro' ? 1900 : 4900; // In INR Paise (1900 = 19.00 - actually let's use INR prices)
-    // For demo, let's say Pro is 1499 INR and Premium is 3999 INR
-    const priceInINR = plan === 'pro' ? 1499 : 3999;
+  async createOrder(userId: string, plan: 'pro' | 'premium' | 'architect', websiteId?: string) {
+    let priceInINR = 0;
+    
+    if (plan === 'architect') priceInINR = 199;
+    else if (plan === 'pro') priceInINR = 1499;
+    else if (plan === 'premium') priceInINR = 3999;
 
     const options = {
       amount: priceInINR * 100, // Amount in smallest currency unit (paise)
       currency: 'INR',
       receipt: `receipt_${userId}_${Date.now()}`,
-      metadata: {
+      notes: {
         userId,
         plan,
+        websiteId: websiteId || '',
       },
     };
 
@@ -94,5 +97,45 @@ export class BillingService {
       return { status: 'ok' };
     }
     return { status: 'error' };
+  }
+
+  async processSuccessfulPayment(orderId: string, paymentId: string) {
+    this.logger.log(`Processing successful payment for order ${orderId}`);
+    
+    try {
+      const order = await this.razorpay.orders.fetch(orderId);
+      const { userId, plan, websiteId } = order.notes;
+
+      // Handle Per-Project Payment (Architect)
+      if (websiteId) {
+        await this.prisma.generatedWebsite.update({
+          where: { id: websiteId },
+          data: { 
+            plan: plan.toUpperCase(), 
+            paymentStatus: 'PAID' 
+          }
+        });
+        this.logger.log(`[SUCCESS] Project ${websiteId} upgraded to ${plan}`);
+      } else {
+        // Handle Subscription Payment
+        const existing = await this.prisma.subscription.findFirst({
+          where: { userId: userId }
+        });
+
+        if (existing) {
+          await this.prisma.subscription.update({
+            where: { id: existing.id },
+            data: { planId: plan, status: 'ACTIVE' }
+          });
+        } else {
+          await this.prisma.subscription.create({
+            data: { userId, planId: plan, status: 'ACTIVE' }
+          });
+        }
+        this.logger.log(`[SUCCESS] Subscription activated for user ${userId} on plan ${plan}`);
+      }
+    } catch (error) {
+      this.logger.error(`Failed to process payment for order ${orderId}: ${error.message}`);
+    }
   }
 }

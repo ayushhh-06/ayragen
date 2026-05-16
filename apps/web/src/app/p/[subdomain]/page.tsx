@@ -8,6 +8,37 @@ import { Loader2, Sparkles, AlertCircle, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MusicPlayer } from '@/frontend/experience/cinematic/MusicPlayer';
 import Link from 'next/link';
+import { Metadata } from 'next';
+
+export async function generateMetadata({ params }: { params: { subdomain: string } }): Promise<Metadata> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/websites/public/${params.subdomain}`);
+    const data = await res.json();
+    const manifest = data.manifest;
+
+    return {
+      title: `${manifest.title} | AyraGen Cinematic Universe`,
+      description: manifest.metadata?.description || `Explore this cinematic digital world built with AyraGen AI.`,
+      openGraph: {
+        title: manifest.title,
+        description: manifest.metadata?.description,
+        images: [`${process.env.NEXT_PUBLIC_API_URL}/websites/${data.id}/og`],
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: manifest.title,
+        description: manifest.metadata?.description,
+        images: [`${process.env.NEXT_PUBLIC_API_URL}/websites/${data.id}/og`],
+      },
+    };
+  } catch (err) {
+    return {
+      title: 'AyraGen Universe',
+      description: 'A cinematic digital experience powered by AyraGen AI.',
+    };
+  }
+}
 
 export default function PublicWebsitePage({ params }: { params: { subdomain: string } }) {
   const [manifest, setManifest] = useState<WebsiteManifest | null>(null);

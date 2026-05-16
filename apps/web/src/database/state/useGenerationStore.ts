@@ -18,6 +18,7 @@ interface GenerationState {
   isGenerating: boolean;
   step: GenerationStep;
   stepMessage: string;
+  plan: 'GENESIS' | 'ARCHITECT' | null;
   manifest: WebsiteManifest | null;
   history: WebsiteManifest[];
   
@@ -65,6 +66,7 @@ export const useGenerationStore = create<GenerationState>()(
       isGenerating: false,
       step: 'idle',
       stepMessage: '',
+      plan: null,
       manifest: null,
       history: [],
       
@@ -86,7 +88,7 @@ export const useGenerationStore = create<GenerationState>()(
 
       setStep: (step, message) => set({ step, stepMessage: message }),
 
-      setManifest: (manifest) => {
+      setManifest: (manifest, plan) => {
         const currentManifest = get().manifest;
         
         // Derive atmosphere from manifest
@@ -101,6 +103,7 @@ export const useGenerationStore = create<GenerationState>()(
 
         set((state) => ({ 
           manifest, 
+          plan: plan || state.plan,
           atmosphere,
           isGenerating: false, 
           step: 'complete',
@@ -153,6 +156,7 @@ export const useGenerationStore = create<GenerationState>()(
         isGenerating: false, 
         step: 'idle', 
         stepMessage: '', 
+        plan: null,
         manifest: null,
         selectedSectionId: null,
         atmosphere: DEFAULT_ATMOSPHERE

@@ -29,10 +29,11 @@ export class ThemeTraitMapper {
         glow: true,
         particles: 'stars',
         glassmorphism: true,
+        grain: analysis.designTokens.grainIntensity > 0.01,
       },
       typography: {
-        heading: 'Inter',
-        body: 'Inter',
+        heading: analysis.typographyStyle.heading,
+        body: analysis.typographyStyle.body,
         sizeMultiplier: 1,
       },
       spacing: {
@@ -44,6 +45,9 @@ export class ThemeTraitMapper {
         intensity: 0.8,
         transitionSpeed: 'normal',
       },
+      // Meta tokens for frontend
+      borderRadius: analysis.designTokens.borderRadius,
+      buttonStyle: analysis.designTokens.buttonStyle,
     };
 
     // Apply Emotional Trait logic

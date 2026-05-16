@@ -8,6 +8,7 @@ import { PropertiesInspector } from '@/frontend/interface/studio/PropertiesInspe
 import { Artboard } from '@/frontend/interface/studio/Artboard';
 import { AuraCopilot } from '@/frontend/interface/studio/AuraCopilot';
 import { AuraWorkspace } from '@/frontend/interface/studio/AuraWorkspace';
+import { PremiumBanner } from '@/frontend/interface/studio/PremiumBanner';
 import { useGenerationStore } from '@/database/state/useGenerationStore';
 import { Loader2, Sparkles } from 'lucide-react';
 import { apiClient } from '@/lib/api-client';
@@ -26,7 +27,7 @@ export default function EditorPageV2({ params }: { params: { id: string } }) {
 
       try {
         const res = await apiClient.get(`/websites/${params.id}`);
-        setManifest(res.data.manifest);
+        setManifest(res.data.manifest, res.data.plan);
       } catch (err) {
         console.error('Failed to load universe:', err);
         setError(true);
@@ -76,7 +77,8 @@ export default function EditorPageV2({ params }: { params: { id: string } }) {
       {/* Editor Components */}
       <EditorHeader />
       
-      <div className="flex h-full pt-16">
+      <div className="flex h-full pt-16 relative">
+        <PremiumBanner />
         <SceneSidebar />
         
         <div className="flex-1 relative">

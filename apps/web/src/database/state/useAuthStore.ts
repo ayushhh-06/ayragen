@@ -6,6 +6,11 @@ export interface User {
   email: string;
   name: string;
   role: string;
+  subscription?: {
+    planId: string;
+    status: string;
+    expiresAt: string | null;
+  } | null;
 }
 
 interface AuthState {

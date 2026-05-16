@@ -8,6 +8,27 @@ export const AuraCopilot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [prompt, setPrompt] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { manifest, setManifest } = useGenerationStore();
+
+  const handleSendMessage = async () => {
+    if (!prompt.trim() || !manifest) return;
+    
+    setLoading(true);
+    try {
+      const response = await apiClient.post(`/websites/${manifest.id}/ai-edit`, {
+        instruction: prompt
+      });
+      
+      // Update local state with AI changes
+      setManifest(response.data.manifest);
+      setPrompt('');
+    } catch (err) {
+      console.error('AI Edit failed:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[200]">
@@ -29,11 +50,11 @@ export const AuraCopilot = () => {
             <div className="p-4 border-b border-white/5 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center">
-                   <Sparkles className="text-primary w-4 h-4" />
+                   <Sparkles className={`text-primary w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                 </div>
                 <div>
                    <h3 className="text-xs font-black text-white uppercase tracking-widest">AyraGen AI</h3>
-                   {!isMinimized && <p className="text-[10px] text-white/30 font-bold uppercase tracking-tighter italic">Neural Architecture Active</p>}
+                   {!isMinimized && <p className="text-[10px] text-white/30 font-bold uppercase tracking-tighter italic">{loading ? 'Synthesizing Vision...' : 'Neural Architecture Active'}</p>}
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -65,6 +86,13 @@ export const AuraCopilot = () => {
                     </p>
                   </div>
                 </div>
+                {loading && (
+                   <div className="flex gap-4 justify-end">
+                      <div className="p-4 rounded-2xl bg-primary/10 border border-primary/20 max-w-[80%]">
+                         <p className="text-sm text-primary/80 animate-pulse font-bold italic italic">Refining Manifest...</p>
+                      </div>
+                   </div>
+                )}
               </div>
             )}
 
@@ -74,18 +102,23 @@ export const AuraCopilot = () => {
                 <input 
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                   placeholder="Ask AI to redesign, rewrite, or expand..."
                   className="w-full bg-white/[0.05] border border-white/10 rounded-2xl py-3.5 pl-5 pr-12 text-sm text-white placeholder:text-white/20 outline-none focus:border-primary/50 transition-all"
                 />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-xl bg-primary text-white shadow-xl hover:scale-105 active:scale-95 transition-all">
-                   <Send size={16} />
+                <button 
+                  onClick={handleSendMessage}
+                  disabled={loading}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-xl bg-primary text-white shadow-xl hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+                >
+                   {loading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
                 </button>
               </div>
               {!isMinimized && (
                 <div className="mt-3 flex items-center justify-center gap-4">
                    <div className="flex items-center gap-1.5 text-[10px] text-white/20 font-bold uppercase tracking-widest">
                      <Command size={10} />
-                     <span>K to search</span>
+                     <span>Enter to Send</span>
                    </div>
                    <div className="w-1 h-1 rounded-full bg-white/10" />
                    <div className="flex items-center gap-1.5 text-[10px] text-white/20 font-bold uppercase tracking-widest text-primary/40">

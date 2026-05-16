@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { RotateCcw, AlertCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { RotateCcw, AlertCircle, ZapOff, Ghost } from 'lucide-react';
 
 export default function Error({
   error,
@@ -11,47 +11,97 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const [glitch, setGlitch] = useState(false);
+
   useEffect(() => {
-    // Log the error to an error reporting service
-    console.error('AyraGen Runtime Error:', error);
+    console.error('AyraGen Architectural Fault:', error);
+    
+    // Create a periodic "glitch" pulse
+    const interval = setInterval(() => {
+      setGlitch(true);
+      setTimeout(() => setGlitch(false), 150);
+    }, 4000);
+    
+    return () => clearInterval(interval);
   }, [error]);
 
   return (
-    <div className="relative min-h-[70vh] flex flex-col items-center justify-center p-6 overflow-hidden">
-      {/* Cinematic blurred background element */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] max-w-[600px] max-h-[600px] rounded-full bg-rose-900/10 blur-[100px] pointer-events-none" />
+    <div className="relative min-h-screen bg-[#020203] flex flex-col items-center justify-center p-8 overflow-hidden">
+      
+      {/* Background Static/Glitch Overlay */}
+      <div className={`fixed inset-0 pointer-events-none opacity-[0.03] transition-opacity duration-75 ${glitch ? 'opacity-[0.1]' : ''}`}>
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat opacity-50" />
+      </div>
+
+      {/* Pulsing Aura */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] rounded-full bg-rose-900/5 blur-[150px] animate-pulse" />
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
-        animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 flex flex-col items-center text-center max-w-lg p-10 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative z-10 max-w-2xl w-full"
       >
-        <motion.div
-          initial={{ rotate: -15, opacity: 0 }}
-          animate={{ rotate: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="w-16 h-16 mb-6 rounded-2xl bg-rose-500/10 flex items-center justify-center border border-rose-500/20 text-rose-400"
-        >
-          <AlertCircle className="w-8 h-8" />
-        </motion.div>
+        <div className="bg-white/[0.02] border border-white/10 rounded-[48px] p-12 md:p-20 backdrop-blur-3xl shadow-[0_50px_100px_rgba(0,0,0,0.8)] flex flex-col items-center text-center">
+          
+          <div className="relative mb-12">
+            <motion.div
+              animate={glitch ? { x: [-2, 2, -1], y: [1, -1, 0] } : {}}
+              className="w-24 h-24 rounded-[32px] bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-500"
+            >
+              <ZapOff size={40} />
+            </motion.div>
+            <div className="absolute -top-4 -right-4 w-10 h-10 rounded-full bg-black border border-rose-500/20 flex items-center justify-center text-[10px] font-black text-rose-400">
+               !
+            </div>
+          </div>
 
-        <h2 className="text-3xl font-display font-bold mb-4 tracking-tight">
-          A Ripple in the Flow
-        </h2>
-        
-        <p className="text-white/50 text-lg leading-relaxed mb-10">
-          Something disturbed the aesthetic engine. Let's realign the connection and try again.
-        </p>
+          <h1 className={`text-5xl md:text-7xl font-display font-bold tracking-tighter mb-6 transition-transform ${glitch ? 'translate-x-1' : ''}`}>
+             Neural Link <br /> <span className="text-rose-500">Severed.</span>
+          </h1>
 
-        <button
-          onClick={() => reset()}
-          className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-black font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.2)]"
-        >
-          <RotateCcw className="w-4 h-4 group-hover:-rotate-180 transition-transform duration-500" />
-          <span>Restore Vision</span>
-        </button>
+          <div className="space-y-4 mb-16">
+            <p className="text-white/40 text-lg font-light leading-relaxed italic">
+              "The aesthetic frequency has been disturbed. The connection to the multiversal core is unstable."
+            </p>
+            <div className="flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-white/10">
+               <Ghost size={12} />
+               Fault Code: {error.digest || 'UNKNOWN_VOID_DISTURBANCE'}
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 w-full">
+            <button
+              onClick={() => reset()}
+              className="flex-1 py-5 bg-white text-black font-black uppercase tracking-widest text-[11px] rounded-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3"
+            >
+              <RotateCcw size={16} />
+              Re-Ignite Neural Connection
+            </button>
+            <Link 
+              href="/"
+              className="flex-1 py-5 bg-white/[0.03] border border-white/10 text-white font-black uppercase tracking-widest text-[11px] rounded-2xl hover:bg-white/[0.06] transition-all flex items-center justify-center"
+            >
+              Return to Reality
+            </Link>
+          </div>
+        </div>
+
+        {/* Pro Tip Tooltip */}
+        <div className="mt-12 text-center">
+           <p className="text-[10px] font-bold uppercase tracking-widest text-white/10">
+             Architect Tip: Try clearing your neural cache if the void persists.
+           </p>
+        </div>
       </motion.div>
     </div>
+  );
+}
+
+// Sub-component for Link to avoid import issues in some Next versions
+function Link({ href, children, className }: any) {
+  return (
+    <a href={href} className={className}>
+      {children}
+    </a>
   );
 }

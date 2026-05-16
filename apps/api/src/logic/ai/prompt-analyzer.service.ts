@@ -17,6 +17,11 @@ const AnalysisSchema = z.object({
     heading: z.string(),
     body: z.string(),
   }),
+  designTokens: z.object({
+    borderRadius: z.enum(['none', 'soft', 'rounded']),
+    buttonStyle: z.enum(['glass', 'solid', 'outline']),
+    grainIntensity: z.number(),
+  }),
   sectionSelection: z.array(z.string()),
   musicMood: z.string(),
 });
@@ -49,6 +54,7 @@ export class PromptAnalyzer {
     - VIBE: The visual atmosphere (e.g., cinematic, ethereal, neon).
     - SECTIONS: Select from [HeroSection, GallerySection, TimelineSection, ShayariSection, MusicPlayer, CountdownSection, PopupNotes, EndingReveal].
     - TYPOGRAPHY: Provide specific font names for Heading and Body.
+    - DESIGN_TOKENS: Suggest values for { borderRadius: 'none'|'soft'|'rounded', buttonStyle: 'glass'|'solid'|'outline', grainIntensity: number (0-1) }.
   `;
 
   async analyze(prompt: string): Promise<AnalysisResult> {
@@ -107,6 +113,7 @@ export class PromptAnalyzer {
         animationStyle: 'energetic',
         sectionSelection: ['HeroSection', 'CountdownSection', 'GallerySection', 'EndingReveal'],
         typographyStyle: { heading: 'Outfit', body: 'Inter' },
+        designTokens: { borderRadius: 'soft', buttonStyle: 'glass', grainIntensity: 0.05 },
         musicMood: 'upbeat-acoustic'
       };
     }
@@ -119,6 +126,7 @@ export class PromptAnalyzer {
       animationStyle: 'smooth',
       sectionSelection: ['HeroSection', 'GallerySection', 'MusicPlayer'],
       typographyStyle: { heading: 'Playfair Display', body: 'Lora' },
+      designTokens: { borderRadius: 'none', buttonStyle: 'outline', grainIntensity: 0.02 },
       musicMood: 'piano-ambient'
     };
   }

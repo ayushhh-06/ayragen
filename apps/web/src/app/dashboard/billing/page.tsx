@@ -10,6 +10,7 @@ const plans = [
   {
     name: 'Genesis',
     price: '₹0',
+    type: 'Forever',
     desc: 'For personal storytellers.',
     features: ['3 AI Generations / mo', 'Standard Rendering', 'AyraGen Branding', 'Community Themes'],
     button: 'Current Essence',
@@ -18,16 +19,18 @@ const plans = [
   {
     name: 'Architect',
     price: '₹199',
-    desc: 'For creative enthusiasts.',
-    features: ['Unlimited Generations', 'Cinematic 4K Export', 'Custom Subdomains', 'Music Library', 'Priority AI Engine'],
-    button: 'Elevate to Architect',
+    type: '/ Occasion',
+    desc: 'Unlock your masterpiece.',
+    features: ['Remove Watermark', 'Custom Subdomain', 'Real Photo Uploads', 'High-Res Assets', 'Lifetime Hosting'],
+    button: 'Elevate Project',
     popular: true
   },
   {
     name: 'Oracle',
     price: '₹499',
-    desc: 'For luxury agencies.',
-    features: ['Everything in Pro', 'White-labeling', 'Team Collaboration', 'Vercel One-click Deploy', '24/7 Concierge Support'],
+    type: '/ Month',
+    desc: 'For luxury creators.',
+    features: ['Unlimited Generations', 'White-labeling', 'Analytics Dashboard', 'Vercel One-click Deploy', '24/7 Concierge'],
     button: 'Unlock Oracle'
   }
 ];
@@ -35,6 +38,7 @@ const plans = [
 export default function BillingPage() {
   const { user } = useAuthStore();
   const [loading, setLoading] = React.useState<string | null>(null);
+  const currentPlan = user?.subscription?.planId?.toLowerCase() || 'genesis';
 
   const loadRazorpay = () => {
     return new Promise((resolve) => {
@@ -139,7 +143,7 @@ export default function BillingPage() {
 
               <div className="flex items-baseline gap-1">
                 <span className="text-5xl font-bold font-display text-white tracking-tighter">{plan.price}</span>
-                <span className="text-white/20 text-[10px] font-bold uppercase tracking-widest">/ month</span>
+                <span className="text-white/20 text-[10px] font-bold uppercase tracking-widest">{plan.type}</span>
               </div>
 
               <ul className="space-y-4 pt-8 border-t border-white/5">
@@ -154,14 +158,14 @@ export default function BillingPage() {
 
             <button 
               onClick={() => handleUpgrade(plan.name)}
-              disabled={plan.current || !!loading}
+              disabled={plan.name.toLowerCase() === currentPlan || !!loading}
               className={`mt-12 w-full py-5 rounded-2xl text-[11px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${
-                plan.current 
+                plan.name.toLowerCase() === currentPlan 
                 ? 'bg-white/[0.05] text-white/20 cursor-default border border-transparent' 
                 : 'bg-white text-black hover:scale-105 active:scale-95 shadow-2xl'
               }`}
             >
-              {loading === plan.name ? 'Re-Syncing...' : plan.button}
+              {loading === plan.name ? 'Re-Syncing...' : (plan.name.toLowerCase() === currentPlan ? 'Current Essence' : plan.button)}
               {loading === plan.name && <Loader2 size={14} className="animate-spin" />}
             </button>
           </motion.div>

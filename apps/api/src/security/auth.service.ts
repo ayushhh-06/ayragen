@@ -30,6 +30,13 @@ export class AuthService {
 
   async login(user: any) {
     const payload = { email: user.email, sub: user.id, role: user.role };
+    
+    // Fetch active subscription
+    const subscription = await this.prisma.subscription.findFirst({
+      where: { userId: user.id, status: 'ACTIVE' },
+      orderBy: { createdAt: 'desc' }
+    });
+
     return {
       access_token: this.jwtService.sign(payload),
       user: {
@@ -37,6 +44,11 @@ export class AuthService {
         email: user.email,
         name: user.name,
         role: user.role,
+        subscription: subscription ? {
+          planId: subscription.planId,
+          status: subscription.status,
+          expiresAt: subscription.expiresAt,
+        } : null,
       },
     };
   }

@@ -5,7 +5,7 @@ import {
   NotFoundException, 
   ForbiddenException 
 } from '@nestjs/common';
-// CloudinaryService removed for core loop
+import { CloudinaryService } from '../assets/cloudinary.service';
 import { TelemetryService } from '../common/telemetry.service';
 import { PrismaService } from '../../database/prisma.service';
 import { CreateProjectDto, DeployWebsiteDto } from './dto/website.dto';
@@ -19,6 +19,7 @@ export class WebsiteService {
     private readonly telemetry: TelemetryService,
     private readonly prisma: PrismaService,
     private readonly exportService: ExportService,
+    private readonly cloudinary: CloudinaryService,
   ) {}
 
   async validateOwnership(websiteId: string, userId: string) {
@@ -46,12 +47,17 @@ export class WebsiteService {
   }
 
   async uploadAsset(websiteId: string, file: any) {
-    this.logger.log(`[PIPELINE] Asset upload placeholder for website ${websiteId}`);
-    return {
-      id: 'local_asset',
-      url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe',
-      type: 'image',
-    };
+    this.logger.log(`[PIPELINE] Uploading asset for website ${websiteId}`);
+    try {
+      const result = await this.cloudinary.uploadImage(file);
+      return {
+        id: result.public_id,
+        url: result.secure_url,
+        type: result.resource_type,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException('Asset upload failed');
+    }
   }
 
   async saveWebsite(projectId: string, manifest: any) {
@@ -93,16 +99,20 @@ export class WebsiteService {
   async publish(id: string, subdomain: string, userId: string) {
     await this.validateOwnership(id, userId);
     
+    // Sanitize subdomain (lowercase, no spaces, alphanumeric only)
+    const cleanSubdomain = subdomain.toLowerCase().replace(/[^a-z0-9-]/g, '');
+    if (!cleanSubdomain) throw new ForbiddenException('Invalid subdomain');
+
     // Check if subdomain is already taken
     const existing = await this.prisma.generatedWebsite.findFirst({
-      where: { subdomain, id: { not: id } }
+      where: { subdomain: cleanSubdomain, id: { not: id } }
     });
     if (existing) throw new ForbiddenException('Subdomain already taken');
 
     return this.prisma.generatedWebsite.update({
       where: { id },
       data: {
-        subdomain,
+        subdomain: cleanSubdomain,
         isPublished: true,
         updatedAt: new Date()
       }

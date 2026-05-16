@@ -11,19 +11,38 @@ export const PublishModal = ({ isOpen, onClose, websiteId, currentSubdomain }: {
   websiteId: string,
   currentSubdomain?: string 
 }) => {
-  const [subdomain, setSubdomain] = useState(currentSubdomain || '');
-  const [isPublishing, setIsPublishing] = useState(false);
-  const [publishedUrl, setPublishedUrl] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [publishStage, setPublishStage] = useState<number>(0);
+  const stages = [
+    'Validating Neural Links',
+    'Snapshotting Aesthetics',
+    'Sealing the Legacy',
+    'Igniting Live Nodes'
+  ];
 
   const handlePublish = async () => {
     if (!subdomain) return;
     setIsPublishing(true);
     setError(null);
+    setPublishStage(0);
+
     try {
+      // Stage 1: Validate
+      setPublishStage(0);
+      await new Promise(r => setTimeout(r, 1000));
+      
+      // Stage 2: OG Pre-gen (simulated via backend call or just wait)
+      setPublishStage(1);
+      await new Promise(r => setTimeout(r, 1200));
+
+      // Stage 3: Real DB update
+      setPublishStage(2);
       await apiClient.post(`/websites/${websiteId}/publish`, { subdomain });
-      const url = `${window.location.origin}/p/${subdomain}`;
+      
+      // Stage 4: Finalize
+      setPublishStage(3);
+      await new Promise(r => setTimeout(r, 800));
+
+      const url = `https://${subdomain}.ayragen.app`;
       setPublishedUrl(url);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to publish universe.');
@@ -58,59 +77,81 @@ export const PublishModal = ({ isOpen, onClose, websiteId, currentSubdomain }: {
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             className="relative w-full max-w-lg bg-[#0a0a0a] border border-white/10 rounded-[32px] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.8)]"
           >
-            <div className="p-8 border-b border-white/5">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3 text-primary">
-                  <Rocket size={20} />
-                  <span className="text-xs font-black uppercase tracking-[0.2em]">Deployment Studio</span>
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3 text-purple-400">
+                  <Rocket size={18} />
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em]">Deployment Studio</span>
                 </div>
                 <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-all">
-                  <X size={20} className="text-white/20" />
+                  <X size={18} className="text-white/20" />
                 </button>
               </div>
 
               {!publishedUrl ? (
-                <div className="space-y-8">
-                  <div>
-                    <h2 className="text-2xl font-bold text-white tracking-tight mb-2">Launch your Universe</h2>
-                    <p className="text-sm text-white/40 leading-relaxed italic">Choose a unique subdomain to make your cinematic experience live for the world.</p>
+                <div className="space-y-10">
+                  <div className="space-y-4">
+                    <h2 className="text-4xl font-bold font-display text-white tracking-tight leading-none">Seal your <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Legacy.</span></h2>
+                    <p className="text-sm text-white/30 leading-relaxed italic">Your cinematic masterpiece is ready to transcend the local studio.</p>
                   </div>
 
                   <div className="space-y-4">
-                    <div className="relative">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20">
-                         <Globe size={18} />
-                      </div>
-                      <input 
-                        value={subdomain}
-                        onChange={(e) => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
-                        placeholder="your-universe-name"
-                        className="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-4 pl-12 pr-32 text-white font-medium focus:border-primary/50 transition-all outline-none"
-                      />
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-white/20 uppercase tracking-widest">
-                        .ayragen.app
+                    <div className="relative group">
+                      <div className="absolute -inset-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-all" />
+                      <div className="relative">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20">
+                           <Globe size={18} />
+                        </div>
+                        <input 
+                          value={subdomain}
+                          onChange={(e) => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
+                          placeholder="your-universe-name"
+                          className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-4 pl-12 pr-32 text-white font-medium focus:border-purple-500/30 transition-all outline-none"
+                        />
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[9px] font-bold text-white/10 uppercase tracking-widest">
+                          .ayragen.app
+                        </div>
                       </div>
                     </div>
                     {error && <p className="text-[10px] text-red-400 font-bold uppercase tracking-widest px-2 italic">{error}</p>}
                   </div>
 
-                  <button
-                    onClick={handlePublish}
-                    disabled={!subdomain || isPublishing}
-                    className="w-full py-4 bg-primary text-white font-black uppercase tracking-widest rounded-2xl shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3"
-                  >
-                    {isPublishing ? (
-                      <>
-                        <Loader2 className="animate-spin" size={18} />
-                        Igniting Neural Links...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles size={18} />
-                        Go Live Now
-                      </>
+                  <div className="space-y-6">
+                    {isPublishing && (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-white/20">
+                          <span>{stages[publishStage]}</span>
+                          <span className="text-purple-400">{Math.round(((publishStage + 1) / stages.length) * 100)}%</span>
+                        </div>
+                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                          <motion.div 
+                            className="h-full bg-gradient-to-r from-purple-500 to-pink-500"
+                            initial={{ width: "0%" }}
+                            animate={{ width: `${((publishStage + 1) / stages.length) * 100}%` }}
+                            transition={{ duration: 0.5 }}
+                          />
+                        </div>
+                      </div>
                     )}
-                  </button>
+
+                    <button
+                      onClick={handlePublish}
+                      disabled={!subdomain || isPublishing}
+                      className="w-full py-5 bg-white text-black font-black uppercase tracking-widest text-[11px] rounded-2xl shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-20 disabled:grayscale flex items-center justify-center gap-3"
+                    >
+                      {isPublishing ? (
+                        <>
+                          <Loader2 className="animate-spin" size={18} />
+                          Synchronizing...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles size={18} />
+                          Go Live Now
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div className="space-y-8 text-center py-4">

@@ -69,7 +69,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 blur-[30px] pointer-events-none group-hover:bg-purple-500/10 transition-all" />
             <div className="flex items-center justify-between mb-3 relative z-10">
               <span className="text-[10px] uppercase tracking-widest font-bold text-white/40">Usage</span>
-              <span className="text-[10px] text-purple-400 font-bold bg-purple-500/10 px-2 py-0.5 rounded-full">Pro</span>
+              <span className="text-[10px] text-purple-400 font-bold bg-purple-500/10 px-2 py-0.5 rounded-full capitalize">
+                {user?.subscription?.planId || 'Genesis'}
+              </span>
             </div>
             <div className="w-full bg-white/[0.05] h-1 rounded-full overflow-hidden mb-2 relative z-10">
               <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-[72%] h-full rounded-full shadow-[0_0_10px_rgba(168,85,247,0.5)]" />

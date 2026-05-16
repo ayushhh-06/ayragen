@@ -64,6 +64,8 @@ export const SectionTypeSchema = z.enum([
   'story-timeline',
   'cinematic-reveal',
   'mood-board',
+  'shayari',
+  'timeline',
 ]);
 
 export type SectionType = z.infer<typeof SectionTypeSchema>;

@@ -62,6 +62,8 @@ export class ContentSynthesizer {
         return 'Generate 3 meaningful questions and answers. { "title": "string", "items": Array<{ "question": "string", "answer": "string" }> }';
       case 'gallery':
         return 'Generate titles for a museum-style gallery. { "title": "string", "subtitle": "string" }';
+      case 'shayari':
+        return 'Generate 3 deep, cinematic Hindi shayaris with English translations. { "lines": Array<{ "hindi": "string", "english": "string" }>, "author": "string", "category": "string" }';
       case 'footer':
         return 'Generate footer links and copyright. { "copyright": "string", "links": Array<{ "label": "string", "href": "string" }> }';
       default:

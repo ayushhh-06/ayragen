@@ -56,6 +56,57 @@ export const PropertiesInspector = () => {
           <div className="space-y-4">
             {Object.keys(selectedSection.content).map(key => {
               const val = selectedSection.content[key];
+              
+              // IMAGE UPLOAD HANDLER
+              if (key.toLowerCase().includes('image') || key.toLowerCase().includes('photo')) {
+                return (
+                  <div key={key} className="space-y-3">
+                    <label className="text-[10px] font-bold text-white/20 uppercase tracking-widest px-1">{key}</label>
+                    <div className="relative group aspect-video rounded-xl overflow-hidden bg-white/[0.03] border border-white/5 flex flex-col items-center justify-center gap-3 hover:border-primary/30 transition-all cursor-pointer">
+                      {val ? (
+                        <>
+                          <img src={val} className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 transition-all" />
+                          <div className="relative z-10 p-2 rounded-full bg-black/50 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all">
+                             <Wand2 size={16} className="text-white" />
+                          </div>
+                        </>
+                      ) : (
+                        <div className="flex flex-col items-center gap-2">
+                           <Play size={24} className="text-white/10" />
+                           <span className="text-[10px] text-white/20 font-bold">Upload Asset</span>
+                        </div>
+                      )}
+                      <input 
+                        type="file" 
+                        accept="image/*"
+                        className="absolute inset-0 opacity-0 cursor-pointer z-20"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          
+                          const formData = new FormData();
+                          formData.append('file', file);
+                          
+                          try {
+                            const res = await fetch(`http://localhost:3007/api/websites/${manifest.id}/assets`, {
+                              method: 'POST',
+                              headers: {
+                                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                              },
+                              body: formData
+                            });
+                            const data = await res.json();
+                            if (data.url) updateContent(key, data.url);
+                          } catch (err) {
+                            console.error('Upload failed:', err);
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                );
+              }
+
               if (typeof val !== 'string' || val.length > 500) return null;
               
               return (
