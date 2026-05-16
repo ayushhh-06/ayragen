@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Menu, X, ArrowRight, Github, Instagram } from 'lucide-react';
+import { Sparkles, Menu, X, ArrowRight, Mail, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -102,9 +102,9 @@ export const GlobalNavbar = () => {
             <div className="pt-8 border-t border-white/5 space-y-6">
                <Link href="/builder" className="w-full py-5 bg-white text-black text-center font-black uppercase tracking-widest rounded-2xl block">Get Started</Link>
                <div className="flex justify-center gap-8 text-white/20">
-                  <Github size={20} />
+                  <Globe size={20} />
                   <X size={20} />
-                  <Instagram size={20} />
+                  <Mail size={20} />
                </div>
             </div>
           </motion.div>

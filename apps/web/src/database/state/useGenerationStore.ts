@@ -35,7 +35,7 @@ interface GenerationState {
   // Actions
   startGeneration: () => void;
   setStep: (step: GenerationStep, message: string) => void;
-  setManifest: (manifest: WebsiteManifest) => void;
+  setManifest: (manifest: WebsiteManifest, plan?: 'GENESIS' | 'ARCHITECT') => void;
   updateManifest: (updater: (prev: WebsiteManifest) => WebsiteManifest) => void;
   resetGeneration: () => void;
   

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, ArrowUpRight, Github, Instagram, Mail, Globe, Shield, X } from 'lucide-react';
+import { Sparkles, ArrowUpRight, Mail, Globe, Shield, X } from 'lucide-react';
 import Link from 'next/link';
 
 export const GlobalFooter = () => {
@@ -28,8 +28,8 @@ export const GlobalFooter = () => {
             </p>
             <div className="flex gap-4">
               <SocialIcon icon={<X size={18} />} />
-              <SocialIcon icon={<Github size={18} />} />
-              <SocialIcon icon={<Instagram size={18} />} />
+              <SocialIcon icon={<Globe size={18} />} />
+              <SocialIcon icon={<Mail size={18} />} />
             </div>
           </div>
 
