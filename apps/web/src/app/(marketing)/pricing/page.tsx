@@ -5,8 +5,10 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Check, Sparkles, Zap, Shield, Crown, Play, ShieldCheck, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { apiClient } from '@/lib/api-client';
+import { useRouter } from 'next/navigation';
 
 export default function PricingPage() {
+  const router = useRouter();
   const [isYearly, setIsYearly] = useState(true);
   const [loading, setLoading] = useState<string | null>(null);
 

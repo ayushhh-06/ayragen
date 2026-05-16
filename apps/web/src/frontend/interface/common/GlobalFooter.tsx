@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, ArrowUpRight, Github, Twitter, Instagram, Mail, Globe, Shield } from 'lucide-react';
+import { Sparkles, ArrowUpRight, Github, Instagram, Mail, Globe, Shield, X } from 'lucide-react';
 import Link from 'next/link';
 
 export const GlobalFooter = () => {
@@ -27,7 +27,7 @@ export const GlobalFooter = () => {
               The world's first cinematic design ecosystem. We don't just build websites; we architect digital universes that pulse with emotion and life.
             </p>
             <div className="flex gap-4">
-              <SocialIcon icon={<Twitter size={18} />} />
+              <SocialIcon icon={<X size={18} />} />
               <SocialIcon icon={<Github size={18} />} />
               <SocialIcon icon={<Instagram size={18} />} />
             </div>
