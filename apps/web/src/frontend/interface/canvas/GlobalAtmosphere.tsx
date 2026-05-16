@@ -4,8 +4,19 @@ import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { WebsiteManifest } from '@ayragen/schema';
 
-export const GlobalAtmosphere = ({ manifest }: { manifest: WebsiteManifest }) => {
-  const { colors, effects } = manifest.theme;
+export const GlobalAtmosphere = ({ manifest }: { manifest?: WebsiteManifest }) => {
+  // Fallback theme if no manifest is provided (e.g., on landing page)
+  const colors = manifest?.theme.colors || {
+    primary: '#c084fc',
+    accent: '#f472b6',
+    background: '#020203'
+  };
+
+  const effects = manifest?.theme.effects || {
+    grain: true,
+    glassmorphism: true,
+    particles: 'subtle'
+  };
 
   // Generate dynamic glowing orbs
   const orbs = useMemo(() => Array.from({ length: 5 }).map((_, i) => ({
