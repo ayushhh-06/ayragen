@@ -28,5 +28,21 @@ export const apiClient = {
       throw { response: { data: errorData } };
     }
     return { data: await res.json() };
+  },
+
+  async delete(endpoint: string) {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+    const res = await fetch(`${baseURL}${endpoint}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': token ? `Bearer ${token}` : '',
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({ message: 'Request failed' }));
+      throw { response: { data: errorData } };
+    }
+    return { data: await res.json().catch(() => ({})) };
   }
 };

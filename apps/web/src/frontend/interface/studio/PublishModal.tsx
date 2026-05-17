@@ -12,6 +12,12 @@ export const PublishModal = ({ isOpen, onClose, websiteId, currentSubdomain }: {
   currentSubdomain?: string 
 }) => {
   const [publishStage, setPublishStage] = useState<number>(0);
+  const [subdomain, setSubdomain] = useState<string>(currentSubdomain || '');
+  const [isPublishing, setIsPublishing] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [publishedUrl, setPublishedUrl] = useState<string | null>(null);
+  const [copied, setCopied] = useState<boolean>(false);
+
   const stages = [
     'Validating Neural Links',
     'Snapshotting Aesthetics',

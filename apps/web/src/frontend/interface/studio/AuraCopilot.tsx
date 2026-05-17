@@ -2,7 +2,9 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Send, Command, X, MessageSquare, Zap, Minimize2, Maximize2, Clapperboard } from 'lucide-react';
+import { Sparkles, Send, Command, X, MessageSquare, Zap, Minimize2, Maximize2, Clapperboard, Loader2 } from 'lucide-react';
+import { useGenerationStore } from '@/database/state/useGenerationStore';
+import { apiClient } from '@/lib/api-client';
 
 export const AuraCopilot = () => {
   const [isOpen, setIsOpen] = useState(false);

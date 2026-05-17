@@ -1,9 +1,10 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useGenerationStore } from '@/database/state/useGenerationStore';
 import { Renderer } from '@/frontend/interface/canvas/Renderer';
+import { Sparkles } from 'lucide-react';
 
 export const Artboard = () => {
   const { viewMode, zoom, manifest, selectedSectionId, setSelectedSection, isGenerating, stepMessage, atmosphere } = useGenerationStore();
