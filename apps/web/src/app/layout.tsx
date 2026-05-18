@@ -7,9 +7,6 @@ export const metadata: Metadata = {
   description: 'Turn your memories into emotionally immersive cinematic universes.',
 };
 
-import { GlobalAtmosphere } from '@/frontend/interface/canvas/GlobalAtmosphere';
-import { CinematicCursor } from '@/frontend/interface/canvas/CinematicCursor';
-
 export default function RootLayout({
   children,
 }: {
@@ -18,8 +15,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased bg-black text-white selection:bg-purple-500/30">
-        <GlobalAtmosphere />
-        <CinematicCursor />
         {children}
       </body>
     </html>
