@@ -66,7 +66,7 @@ export class WebsiteService {
         projectId,
         title: manifest.title,
         description: manifest.description,
-        manifest: manifest, // Using native JSON field
+        manifest: typeof manifest === 'string' ? manifest : JSON.stringify(manifest),
       },
     });
   }
@@ -92,7 +92,7 @@ export class WebsiteService {
     const website = await this.validateOwnership(id, userId);
     return {
       ...website,
-      manifest: website.manifest as any
+      manifest: typeof website.manifest === 'string' ? JSON.parse(website.manifest) : website.manifest
     };
   }
 
@@ -129,7 +129,7 @@ export class WebsiteService {
     return {
       id: website.id,
       title: website.title,
-      manifest: website.manifest as any
+      manifest: typeof website.manifest === 'string' ? JSON.parse(website.manifest) : website.manifest
     };
   }
 
@@ -137,7 +137,7 @@ export class WebsiteService {
     const website = await this.prisma.generatedWebsite.findUnique({ where: { id: websiteId } });
     if (!website) return null;
 
-    const manifest = website.manifest as any;
+    const manifest = typeof website.manifest === 'string' ? JSON.parse(website.manifest) : website.manifest;
     const firstSection = manifest.sections[0];
     
     return {

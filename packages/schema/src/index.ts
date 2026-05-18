@@ -42,6 +42,7 @@ export const ThemeSchema = z.object({
   }).optional(),
   spacing: z.any().optional(), // Can be string or object { base, sectionGap }
   borderRadius: z.string().optional(),
+  buttonStyle: z.string().optional(),
   gradients: z.any().optional(),
 });
 

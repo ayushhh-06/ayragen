@@ -10,7 +10,6 @@ import { SocialService } from './social.service';
 import { VideoExportService } from './video-export.service';
 import { AIEditOrchestrator } from '../ai/edit-orchestrator.service';
 import { Response } from 'express';
-import { Res } from '@nestjs/common';
 import { 
   CreateProjectDto, 
   GenerateWebsiteDto, 
@@ -147,7 +146,7 @@ export class WebsiteController {
     return this.prisma.generatedWebsite.update({
       where: { id },
       data: {
-        manifest: dto.manifest,
+        manifest: typeof dto.manifest === 'string' ? dto.manifest : JSON.stringify(dto.manifest),
         updatedAt: new Date(),
       }
     });
@@ -165,7 +164,7 @@ export class WebsiteController {
     return this.prisma.generatedWebsite.update({
       where: { id },
       data: {
-        manifest: updatedManifest,
+        manifest: typeof updatedManifest === 'string' ? updatedManifest : JSON.stringify(updatedManifest),
         updatedAt: new Date(),
       }
     });
